@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+<div class="form-group">
+    <div class="form-horizontal">
+        <label for="email_login">E-mail:</label>
+        <input type="email" id="email_login" class="form-control" placeholder="e-mail" />
+        <br />
+        <label for="pass_login">Senha:</label>
+        <input type="password" id="pass_login" class="form-control" placeholder="senha" />
+        <br />
+        <button class="btn btn-default" id="btn_login" value="LogIn">Log In</button>
+        @Html.ActionLink("Não tem cadastro? Registre-se aqui", "Registro", "Auth")
+    </div>
+</div>
