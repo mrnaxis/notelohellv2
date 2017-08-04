@@ -2,6 +2,57 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>HI TEST! - HI! o/</h1>
+<style>
+    .centro{
+        margin: auto;
+        position: center;
+        width: 35%;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="centro">
+            <label for="gameTag"></label>
+            <input type="text" id="gameTag" name="gameTag" class="form-control" placeholder="BattleTag" />
+            <input type="button" id="send" name="send" class="btn btn-primary" value="Buscar" />
+        </div>
+    </div>
+    <div class="row">
+        <p id="dataRec" name="dataReq"></p>
+    </div>
 </div>
+
+<script>
+    function enviarDados() {
+        var gameTag = document.getElementById("gameTag");
+
+        $("#dataRec").html("Carregando as Paradas... Isso pode demorar um pouquinho...");
+
+        if (gameTag !== null && gameTag !== 'undefined') {
+
+            if (gameTag.value === "") {
+                alert("digite seu battleTag");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Teste", "Home")",
+                data: JSON.stringify({ tag: gameTag.value }),
+                contentType: "application/json;",
+                dataType: "json",
+                success: function (data) {
+                    if (data !== null)
+                        $("#dataRec").html(data);
+                },
+                error: function () {
+                    alert("Deu Ruim!");
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        $("#send").click(enviarDados);
+    });
+</script>
