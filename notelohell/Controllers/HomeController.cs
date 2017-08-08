@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
+
 namespace notelohell.Controllers
 {
     public class HomeController : Controller
@@ -34,15 +35,26 @@ namespace notelohell.Controllers
             if (string.IsNullOrEmpty(tag))
                 return Json(new object { });
 
-            string data;
-            using(WebClient wc = new WebClient())
+            if (tag.IndexOf("#") > 0)
+                tag = tag.Replace("#","-");
+
+            string data = string.Empty;
+            try
             {
-                wc.Headers.Add("Accept-Language", " en-US");
-                wc.Headers.Add("Accept", " text/html, application/xhtml+xml, */*");
-                wc.Headers.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
-                string url = "http://owapi.net/api/v3/u/" + tag + "/stats";
-                data = wc.DownloadString(url);
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers.Add("Accept-Language", " en-US");
+                    wc.Headers.Add("Accept", " text/html, application/xhtml+xml, */*");
+                    wc.Headers.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
+                    string url = "http://owapi.net/api/v3/u/" + tag + "/stats";
+                    data = wc.DownloadString(url);
+                }
             }
+            catch
+            {
+                //erro custom aqui
+            }
+            
 
             return Json(data);
         }
