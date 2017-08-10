@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using notelohell.Models;
 
 namespace notelohell.Controllers
 {
@@ -14,9 +15,12 @@ namespace notelohell.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public ActionResult Registro()
         {
+            //fazer validações antes
+            UsersModel user = new UsersModel();
+            user.gravarUsuario(user);
             return View();
         }
 
