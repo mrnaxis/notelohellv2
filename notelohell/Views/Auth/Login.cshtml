@@ -6,13 +6,15 @@
 <h2>Login</h2>
 <div class="form-group">
     <div class="form-horizontal">
-        <label for="email_login">E-mail:</label>
-        <input type="email" id="email_login" class="form-control" placeholder="e-mail" />
-        <br />
-        <label for="pass_login">Senha:</label>
-        <input type="password" id="pass_login" class="form-control" placeholder="senha" />
-        <br />
-        <button class="btn btn-default" id="btn_login" value="LogIn">Log In</button>
+        <form action="/auth/validatelogin" method="post">
+            <label for="email_login">E-mail:</label>
+            <input type="email" id="email_login" class="form-control" placeholder="e-mail" />
+            <br />
+            <label for="pass_login">Senha:</label>
+            <input type="password" id="pass_login" class="form-control" placeholder="senha" />
+            <br />
+            <input type="submit" class="btn btn-default" id="btn_login" value="LogIn">
+        </form>      
         @Html.ActionLink("Não tem cadastro? Registre-se aqui", "Registro", "Auth")
     </div>
 </div>

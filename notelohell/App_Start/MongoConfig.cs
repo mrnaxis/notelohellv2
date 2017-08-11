@@ -12,7 +12,6 @@ namespace notelohell.App_Start
     {
         protected static IMongoClient _client;
         protected static IMongoDatabase _database;
-
         public MongoConfig()
         {
             _client = new MongoClient("mongodb://localhost:27017");
@@ -22,6 +21,11 @@ namespace notelohell.App_Start
         {
            var col = _database.GetCollection<BsonDocument>(collection);
            col.InsertOne(doc);
+        }
+        public List<BsonDocument> buscar(FilterDefinition<BsonDocument> filter,string collection)
+        {
+            var col = _database.GetCollection<BsonDocument>(collection);
+            return col.Find(filter).ToList();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using notelohell.Models;
+using notelohell.DAO;
 
 namespace notelohell.Controllers
 {
@@ -28,12 +29,14 @@ namespace notelohell.Controllers
             user.gravarUsuario(user);
             return RedirectToAction("Index", "Home");
         }
-
-        [ValidateAntiForgeryToken]
-        public ActionResult ValidateLogin()
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult ValidateLogin(string login, string senha)
         {
             if(!ModelState.IsValid)
                 return View();
+            UsersDAO dao = new UsersDAO();
+            dao.buscarUsuario("jeefferson.tracinkas@gmail.com","12345");
 
             return null;
         }
