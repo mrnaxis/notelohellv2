@@ -12,6 +12,8 @@ namespace notelohell.Models
         [Required]
         public string Id { get; set; }
         [Required]
+        public string Nome { get; set; }
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
         [Required]
@@ -22,7 +24,7 @@ namespace notelohell.Models
         public void gravarUsuario(UsersModel user)
         {
             UsersDAO dao = new UsersDAO();
-            dao.gravarUsuario(user);
+            dao.gravarUsuarioAsync(user);
         }
     }
 }

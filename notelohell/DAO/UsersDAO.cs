@@ -12,11 +12,11 @@ namespace notelohell.DAO
 {
     public class UsersDAO
     {
-        public void gravarUsuario(UsersModel user)
+        public void gravarUsuarioAsync(UsersModel user)
         {
             var usuario = new BsonDocument
             {
-                {"nickname",user.Id },
+                {"nome",user.Nome },
                 {"email",user.Email },
                 {"pwhash",user.pwHash },
                 {"gametag",user.gameTag }

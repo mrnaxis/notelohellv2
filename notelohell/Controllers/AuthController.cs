@@ -15,13 +15,18 @@ namespace notelohell.Controllers
         {
             return View();
         }
-        [HttpPost]
+
         public ActionResult Registro()
         {
-            //fazer validações antes
-            UsersModel user = new UsersModel();
-            user.gravarUsuario(user);
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult RegistrarUsuario(UsersModel user)
+        {
+            //fazer validações antes
+            user.gravarUsuario(user);
+            return RedirectToAction("Index", "Home");
         }
 
         [ValidateAntiForgeryToken]

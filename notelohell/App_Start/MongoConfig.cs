@@ -15,13 +15,13 @@ namespace notelohell.App_Start
 
         public MongoConfig()
         {
-            _client = new MongoClient();
+            _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("notel");
         }
-        public async void salvarCollection(BsonDocument doc,string collection)
+        public void salvarCollection(BsonDocument doc,string collection)
         {
            var col = _database.GetCollection<BsonDocument>(collection);
-            await col.InsertOneAsync(doc);
+           col.InsertOne(doc);
         }
     }
 }
