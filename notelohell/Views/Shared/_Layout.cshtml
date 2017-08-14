@@ -26,8 +26,15 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Login","Login","Auth")</li>
-                    <li><a>LogTheFoff</a></li>
+                    @if (Session["Player"] == null)
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Auth")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Login", "Index", "Home")</li>
+                    }
+                    <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
                 </ul>
             </div>
         </div>

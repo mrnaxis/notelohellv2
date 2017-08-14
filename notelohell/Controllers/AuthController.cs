@@ -48,6 +48,7 @@ namespace notelohell.Controllers
             if (us != null)
             {
                 Session["Player"] = us;
+                Session["PlayerName"] = us.Email;
                 return RedirectToAction("Index", "Home");
             }
             else
