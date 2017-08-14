@@ -10,8 +10,8 @@ namespace notelohell.App_Start
 {
     public class MongoConfig
     {
-        protected static IMongoClient _client;
-        protected static IMongoDatabase _database;
+        protected IMongoClient _client { get; set; }
+        protected IMongoDatabase _database { get; set; }
         public MongoConfig()
         {
             _client = new MongoClient("mongodb://localhost:27017");

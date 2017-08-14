@@ -13,8 +13,8 @@ namespace notelohell.DAO
     public class UsersDAO
     {
         protected static string collection = "usuarios";
-        protected static MongoConfig conf = new MongoConfig();
-        public void gravarUsuarioAsync(UsersModel user)
+        protected MongoConfig conf = new MongoConfig();
+        public void gravarUsuario(UsersModel user)
         {
             var usuario = new BsonDocument
             {
@@ -29,13 +29,23 @@ namespace notelohell.DAO
         public UsersModel buscarUsuario(string login, string senha)
         {           
             var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.Eq("email", login) & builder.Eq("pwhash", senha);
-            var doc = conf.buscar(filter,collection);
+            var filter = builder.Eq("nn","");
+            if (senha == null)
+                filter = builder.Eq("email", login);
+            else
+                filter = builder.Eq("email", login) & builder.Eq("pwhash", senha);
+
+            List<BsonDocument> doc = conf.buscar(filter,collection);
             UsersModel usuario = new UsersModel();
-            usuario.Nome = doc[0]["nome"].ToString();
-            usuario.Email = doc[0]["email"].ToString();
-            usuario.pwHash = doc[0]["pwhash"].ToString();
-            usuario.gameTag = doc[0]["gametag"].ToString();
+
+            if (doc.Count > 0)
+            {
+                usuario.Nome = doc.First()["nome"].ToString();
+                usuario.Email = doc.First()["email"].ToString();
+                usuario.gameTag = doc.First()["gametag"].ToString();
+            }
+            else
+                return null;
             return usuario;
         }
     }

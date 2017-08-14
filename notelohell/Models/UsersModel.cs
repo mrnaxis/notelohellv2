@@ -9,7 +9,6 @@ namespace notelohell.Models
 {
     public class UsersModel
     {
-        [Required]
         public string Id { get; set; }
         [Required]
         public string Nome { get; set; }
@@ -21,10 +20,26 @@ namespace notelohell.Models
         [Required]
         public string gameTag { get; set; }
 
-        public void gravarUsuario(UsersModel user)
+        public bool gravarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            dao.gravarUsuarioAsync(user);
+            UsersModel usercheck = dao.buscarUsuario(this.Email,null);
+            if (usercheck == null)
+            {
+                dao.gravarUsuario(this);
+                return true;
+            }
+            return false;
+        }
+
+        public UsersModel buscarUsuario()
+        {
+            UsersDAO dao = new UsersDAO();
+            UsersModel userFind = dao.buscarUsuario(this.Email, this.pwHash);
+            if (userFind == null)
+                return null;
+            else
+                return userFind;
         }
     }
 }

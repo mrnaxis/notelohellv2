@@ -26,19 +26,32 @@ namespace notelohell.Controllers
         public ActionResult RegistrarUsuario(UsersModel user)
         {
             //fazer validações antes
-            user.gravarUsuario(user);
+            user.gravarUsuario();
             return RedirectToAction("Index", "Home");
         }
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult ValidateLogin(string login, string senha)
         {
             if(!ModelState.IsValid)
                 return View();
-            UsersDAO dao = new UsersDAO();
-            dao.buscarUsuario("jeefferson.tracinkas@gmail.com","12345");
 
-            return null;
+            if (login == "" || senha == "")
+                return RedirectToAction("Login", "Auth");
+
+            UsersModel us = new UsersModel();
+            us.Email = login;
+            us.pwHash = senha;
+
+            us = us.buscarUsuario();
+
+            if (us != null)
+            {
+                Session["Player"] = us;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+                return null;
         }
     }
 }
