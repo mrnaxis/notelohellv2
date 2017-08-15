@@ -14,35 +14,29 @@ namespace notelohell.DAO
     {
         protected static string collection = "usuarios";
         protected MongoConfig conf = new MongoConfig();
-        public void gravarUsuario(UsersModel user)
+        public void GravarUsuario(UsersModel user)
         {
-            var usuario = new BsonDocument
-            {
-                {"nome",user.Nome },
-                {"email",user.Email },
-                {"pwhash",user.pwHash },
-                {"gametag",user.gameTag }
-            };
-            conf.salvarCollection(usuario,collection);
+
+            conf.SalvarCollection(user,collection);
         }
 
-        public UsersModel buscarUsuario(string login, string senha)
+        public UsersModel BuscarUsuario(string login, string senha)
         {           
             var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.Eq("nn","");
+            FilterDefinition<BsonDocument> filter;
             if (senha == null)
-                filter = builder.Eq("email", login);
+                filter = builder.Eq("Email", login);
             else
-                filter = builder.Eq("email", login) & builder.Eq("pwhash", senha);
+                filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha);
 
-            List<BsonDocument> doc = conf.buscar(filter,collection);
+            List<BsonDocument> doc = conf.Buscar(filter,collection);
             UsersModel usuario = new UsersModel();
 
             if (doc.Count > 0)
             {
-                usuario.Nome = doc.First()["nome"].ToString();
-                usuario.Email = doc.First()["email"].ToString();
-                usuario.gameTag = doc.First()["gametag"].ToString();
+                usuario.Nome = doc.First()["Nome"].ToString();
+                usuario.Email = doc.First()["Email"].ToString();
+                usuario.GameTag = doc.First()["GameTag"].ToString();
             }
             else
                 return null;

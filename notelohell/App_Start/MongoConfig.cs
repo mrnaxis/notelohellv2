@@ -17,12 +17,12 @@ namespace notelohell.App_Start
             _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("notel");
         }
-        public void salvarCollection(BsonDocument doc,string collection)
+        public void SalvarCollection(object doc,string collection)
         {
-           var col = _database.GetCollection<BsonDocument>(collection);
+           var col = _database.GetCollection<object>(collection);
            col.InsertOne(doc);
         }
-        public List<BsonDocument> buscar(FilterDefinition<BsonDocument> filter,string collection)
+        public List<BsonDocument> Buscar(FilterDefinition<BsonDocument> filter,string collection)
         {
             var col = _database.GetCollection<BsonDocument>(collection);
             return col.Find(filter).ToList();

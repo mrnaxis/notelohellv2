@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using notelohell.Models;
 using notelohell.DAO;
+using notelohell.AuthControl;
 
 namespace notelohell.Controllers
 {
@@ -16,6 +17,12 @@ namespace notelohell.Controllers
         {
             return View();
         }
+        [IDRequired]
+        public ActionResult BeholderUser()
+        {
+            UsersModel us = (UsersModel) Session["Player"];
+            return View(us);
+        }
 
         public ActionResult Registro()
         {
@@ -26,7 +33,10 @@ namespace notelohell.Controllers
         public ActionResult RegistrarUsuario(UsersModel user)
         {
             //fazer validações antes
-            user.gravarUsuario();
+            if (!ModelState.IsValid)
+                return View();
+
+            user.GravarUsuario();
             return RedirectToAction("Index", "Home");
         }
         [HttpPost]
@@ -39,11 +49,13 @@ namespace notelohell.Controllers
             if (login == "" || senha == "")
                 return RedirectToAction("Login", "Auth");
 
-            UsersModel us = new UsersModel();
-            us.Email = login;
-            us.pwHash = senha;
+            UsersModel us = new UsersModel
+            {
+                Email = login,
+                Pwsin = senha
+            };
 
-            us = us.buscarUsuario();
+            us = us.BuscarUsuario();
 
             if (us != null)
             {

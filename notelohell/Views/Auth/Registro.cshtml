@@ -8,22 +8,46 @@
     <div class="form-horizontal">
         <form action="/Auth/RegistrarUsuario/" method="POST">
             @Html.AntiForgeryToken()
-            <label for="nome_reg">Nome:</label>
-            <input type="text" id="nome_reg" name="Nome" class="form-control" />
-            <br />
-            <label for="email_reg">E-mail:</label>
-            <input type="email" id="email_reg" name="Email" class="form-control" />
-            <br />
-            <label for="gametag_reg">Gametag:</label>
-            <input type="text" id="gametag_reg" name="gameTag" class="form-control" />
-            <br />
-            <label for="pass_reg">Senha:</label>
-            <input type="password" id="pass_reg" class="form-control" />
-            <br />
-            <label for="passConf_reg">Confirme a senha:</label>
-            <input type="password" id="passConf_reg" name="pwHash" class="form-control" />
-            <br />
+            <div class="form-group">
+                <label for="nome_reg">Nome:</label>
+                <input type="text" id="nome_reg" name="Nome" class="form-control" />
+                <br />
+                <label for="email_reg">E-mail:</label>
+                <input type="email" id="email_reg" name="Email" class="form-control" />
+                <br />
+                <label for="gametag_reg">Gametag:</label>
+                <input type="text" id="gametag_reg" name="gameTag" class="form-control" />
+                <br />
+            </div>
+            <div id="pwGroup" class="form-group">
+                <label for="pass_reg">Senha:</label>
+                <input type="password" id="pass_reg" class="form-control" />
+                <br />
+                <label for="passConf_reg">Confirme a senha:</label>
+                <input type="password" id="passConf_reg" name="Pwsin" class="form-control" />
+                <span id="pwGroupError" class="help-block hide">Senhas não conferem</span>
+                <br />
+            </div>
             <input type="submit" class="btn btn-default" id="btn_registrar" value="Registrar" />
         </form>
     </div>
+    <script type="text/javascript" src="~/Scripts/General/Verifications.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn_registrar").on("click", function () {
+                return checkCampos($("#pass_reg"), $("#passConf_reg"),0)
+            });
+
+            $("#passConf_reg").on("input", function () {
+                if (!checkCampos($("#pass_reg"), $("#passConf_reg"), 0)) {
+                    $("#pwGroup").addClass('has-error');
+                    $("#pwGroupError").removeClass('hide');
+                }
+                else{
+                    $("#pwGroup").removeClass('has-error');
+                    $("#pwGroupError").addClass('hide');
+                }
+            });
+        });
+    </script>
 </div>

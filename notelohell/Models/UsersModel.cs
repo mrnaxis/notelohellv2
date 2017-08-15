@@ -4,38 +4,42 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using notelohell.DAO;
+using MongoDB.Bson;
 
 namespace notelohell.Models
 {
     public class UsersModel
     {
-        public string Id { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonId]
+        public ObjectId _id { get; set; }
         [Required]
         public string Nome { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        public string pwHash { get; set; }
+        public string Pwsin { get; set; }
         [Required]
-        public string gameTag { get; set; }
+        public string GameTag { get; set; }
+        [Required]
+        public DateTime BirthDate { get; set; }
 
-        public bool gravarUsuario()
+        public bool GravarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel usercheck = dao.buscarUsuario(this.Email,null);
+            UsersModel usercheck = dao.BuscarUsuario(this.Email,null);
             if (usercheck == null)
             {
-                dao.gravarUsuario(this);
+                dao.GravarUsuario(this);
                 return true;
             }
             return false;
         }
 
-        public UsersModel buscarUsuario()
+        public UsersModel BuscarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel userFind = dao.buscarUsuario(this.Email, this.pwHash);
+            UsersModel userFind = dao.BuscarUsuario(this.Email, this.Pwsin);
             if (userFind == null)
                 return null;
             else

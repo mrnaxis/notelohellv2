@@ -29,12 +29,13 @@
                     @if (Session["Player"] == null)
                     {
                         <li>@Html.ActionLink("Login", "Login", "Auth")</li>
+                        <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Login", "Index", "Home")</li>
+                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Login", "BeholderUser", "Auth")</li>
+                        <li>@Html.ActionLink("Logoff","Index","Home")</li>
                     }
-                    <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
                 </ul>
             </div>
         </div>
