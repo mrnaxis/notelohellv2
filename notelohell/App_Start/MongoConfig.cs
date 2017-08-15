@@ -22,9 +22,9 @@ namespace notelohell.App_Start
            var col = _database.GetCollection<object>(collection);
            col.InsertOne(doc);
         }
-        public List<BsonDocument> Buscar(FilterDefinition<BsonDocument> filter,string collection)
+        public List<T> Buscar<T>(FilterDefinition<T> filter,string collection)
         {
-            var col = _database.GetCollection<BsonDocument>(collection);
+            var col = _database.GetCollection<T>(collection);
             return col.Find(filter).ToList();
         }
     }

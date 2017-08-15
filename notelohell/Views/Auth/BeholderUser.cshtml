@@ -10,8 +10,10 @@
             <img src="" />
         </div>
         <div class="col-xs-12 col-md-6">
-            <label for="nome_Behold">Nome:</label><input type="text" id="nome_Behold" name="us.Nome" readonly />
-            <label for="tag_Behold">Tag:</label><input type="text" id="tag_Behold" name="us.GameTag" readonly />
+            <div class="form-horizontal">
+                <label for="nome_Behold">Nome:</label><input type="text" class="form-control" id="nome_Behold" value="@Model.Nome" readonly /><br />
+                <label for="tag_Behold">Tag:</label><input type="text" class="form-control" id="tag_Behold" value="@Model.GameTag" readonly /><br />
+            </div>
         </div>
     </div>
 

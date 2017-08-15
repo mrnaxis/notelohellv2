@@ -22,24 +22,21 @@ namespace notelohell.DAO
 
         public UsersModel BuscarUsuario(string login, string senha)
         {           
-            var builder = Builders<BsonDocument>.Filter;
-            FilterDefinition<BsonDocument> filter;
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
             if (senha == null)
                 filter = builder.Eq("Email", login);
             else
                 filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha);
 
-            List<BsonDocument> doc = conf.Buscar(filter,collection);
-            UsersModel usuario = new UsersModel();
+            List<UsersModel> doc = conf.Buscar(filter, collection);
+            UsersModel usuario;
 
             if (doc.Count > 0)
-            {
-                usuario.Nome = doc.First()["Nome"].ToString();
-                usuario.Email = doc.First()["Email"].ToString();
-                usuario.GameTag = doc.First()["GameTag"].ToString();
-            }
+                usuario = doc[0];
             else
-                return null;
+                usuario = null;
+
             return usuario;
         }
     }

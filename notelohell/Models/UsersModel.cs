@@ -5,24 +5,31 @@ using System.Linq;
 using System.Web;
 using notelohell.DAO;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace notelohell.Models
 {
     public class UsersModel
     {
-        [MongoDB.Bson.Serialization.Attributes.BsonId]
-        public ObjectId _id { get; set; }
-        [Required]
+        [BsonId]
+        public ObjectId Id { get; set; }
+        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite seu nome")]
         public string Nome { get; set; }
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "E-mail inválido")]
         public string Email { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite uma senha válida")]
         public string Pwsin { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite uma gametag/nickname valida")]
         public string GameTag { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
+
+        public UsersModel()
+        {
+            this.Id = ObjectId.GenerateNewId();
+        }
 
         public bool GravarUsuario()
         {

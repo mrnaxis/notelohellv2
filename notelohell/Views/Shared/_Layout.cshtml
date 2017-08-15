@@ -28,13 +28,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (Session["Player"] == null)
                     {
-                        <li>@Html.ActionLink("Login", "Login", "Auth")</li>
+                        <li>@Html.ActionLink("Sign in", "Login", "Auth")</li>
                         <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Login", "BeholderUser", "Auth")</li>
-                        <li>@Html.ActionLink("Logoff","Index","Home")</li>
+                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Sign in", "BeholderUser", "Auth")</li>
+                        <li>@Html.ActionLink("Sign out","LogOff","Auth")</li>
                     }
                 </ul>
             </div>

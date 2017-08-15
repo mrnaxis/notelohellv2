@@ -23,12 +23,20 @@ namespace notelohell.Controllers
             UsersModel us = (UsersModel) Session["Player"];
             return View(us);
         }
+        [IDRequired]
+        public ActionResult LogOff()
+        {
+            Session["Player"] = null;
+            Session["PlayerName"] = null;
+            return RedirectToAction("Index", "Home");
+        }
 
         public ActionResult Registro()
         {
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult RegistrarUsuario(UsersModel user)
         {
@@ -39,15 +47,20 @@ namespace notelohell.Controllers
             user.GravarUsuario();
             return RedirectToAction("Index", "Home");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ValidateLogin(string login, string senha)
         {
             if(!ModelState.IsValid)
-                return View();
+                return View("Login");
 
             if (login == "" || senha == "")
-                return RedirectToAction("Login", "Auth");
+            {
+                ViewBag.Error = true;
+                ViewBag.ErrorMsg = "Campo de login e senha devem ser preenchidos.";
+                return View("Login");
+            }
 
             UsersModel us = new UsersModel
             {
@@ -64,7 +77,12 @@ namespace notelohell.Controllers
                 return RedirectToAction("Index", "Home");
             }
             else
-                return null;
+            {
+                ViewBag.Error = true;
+                ViewBag.ErrorMsg = "Usuário ou Senha Invalidos.";
+                ViewBag.Email = login;
+                return View("Login");
+            }
         }
     }
 }
