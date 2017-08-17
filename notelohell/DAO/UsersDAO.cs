@@ -13,15 +13,14 @@ namespace notelohell.DAO
     public class UsersDAO
     {
         protected static string collection = "usuarios";
-        protected MongoConfig conf = new MongoConfig();
+        protected static MongoConfig conf = new MongoConfig();
         public void GravarUsuario(UsersModel user)
         {
-
-            conf.SalvarCollection(user,collection);
+            conf.SalvarCollection(user, collection);
         }
 
         public UsersModel BuscarUsuario(string login, string senha)
-        {           
+        {
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
             if (senha == null)
@@ -38,6 +37,16 @@ namespace notelohell.DAO
                 usuario = null;
 
             return usuario;
+        }
+        public void AlterarUsuario(UsersModel user)//precisa de um usuario inteiro
+        {
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
+            filter = builder.Eq("Email", user.Email);
+            var doc = new BsonDocument {//colocar campos editaveis aqui
+                                        
+                                      };
+            conf.Alterar(filter, collection,doc);
         }
     }
 }

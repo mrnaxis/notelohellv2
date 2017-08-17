@@ -14,27 +14,30 @@ namespace notelohell.Models
     {
         [BsonId]
         public ObjectId Id { get; set; }
-        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite seu nome")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Digite seu nome")]
         public string Nome { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "E-mail inválido")]
         public string Email { get; set; }
-        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite uma senha válida")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Digite uma senha válida")]
         public string Pwsin { get; set; }
-        [Required(AllowEmptyStrings = false,ErrorMessage = "Digite uma gametag/nickname valida")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Digite uma gametag/nickname valida")]
         public string GameTag { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
+        [Required]
+        public bool Ativo { get; private set; }
 
         public UsersModel()
         {
             this.Id = ObjectId.GenerateNewId();
+            this.Ativo = true;
         }
 
         public bool GravarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel usercheck = dao.BuscarUsuario(this.Email,null);
+            UsersModel usercheck = dao.BuscarUsuario(this.Email, null);
             if (usercheck == null)
             {
                 dao.GravarUsuario(this);
@@ -47,10 +50,27 @@ namespace notelohell.Models
         {
             UsersDAO dao = new UsersDAO();
             UsersModel userFind = dao.BuscarUsuario(this.Email, this.Pwsin);
+
             if (userFind == null)
                 return null;
             else
                 return userFind;
+        }
+        public void DesativarUsuario()
+        {
+            UsersDAO dao = new UsersDAO();
+            UsersModel user = dao.BuscarUsuario(this.Email, this.Pwsin);
+            if (user != null)
+            {
+                this.Ativo = false;
+                dao.AlterarUsuario(this);
+            }
+
+        }
+
+        public void AlterarUsuario()
+        {
+
         }
     }
 }
