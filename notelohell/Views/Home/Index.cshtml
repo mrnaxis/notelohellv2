@@ -3,28 +3,82 @@
 }
 
 <style>
+    body{
+        overflow-x:hidden;
+        color: #f4fff7;
+        height: 100%;
+    }
     .centro{
         margin: auto;
         position: center;
-        width: 35%;
+        width: 40%;
+        padding-left: 60px;
+    }
+    .botaotine{
+        background-color: #292f36;
+        border: none;
+        padding: 10px 15px 10px 15px;
+        color: #eaeaea;
+        transition: background-color 1s;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+    }
+    .botaotine:hover{
+        background-color: #001E35;
+    }
+    .divlazuli{
+        background-color: #052F5F;
+    }
+    .textin{
+        border:0;
+        border-bottom: 2px solid #292f36;
+        border-radius:0;
+        outline: none;
+        background-color: transparent;
+        height: 35px;
+        width: 65%;
+        color: #eaeaea;
+    }
+    .textin::-webkit-input-placeholder{
+        color: #eaeaea;
+    }
+    .textin::-moz-placeholder{
+        color: #eaeaea;
+    }
+    .imgfront {
+        background-image: url('../../img/OW_Anniversary_023.jpg');
+        width: 100%;
+        min-height:500px;
+        padding-top: 200px;
+        display:block;
+        margin:auto;
+        border: none;
     }
 </style>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="centro">
-            <div class="form-inline form-group">
-                <br />
-                <label for="gameTag"></label>
-                <input type="text" id="gameTag" name="gameTag" class="form-control" placeholder="BattleTag" />
-                <input type="button" id="send" name="send" class="btn btn-primary" value="Buscar" />
+<div class="imgfront">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="centro">
+                <div class="form-inline form-group" ">
+                    <label for="gameTag"></label>
+                    <input type="text" id="gameTag" name="gameTag" class="textin" placeholder="BattleTag" />
+                    <input type="button" id="send" name="send" class="botaotine" value="Buscar" />
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <p id="dataRec" name="dataReq"></p>
+</div>
+<div class="divlazuli">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="centro">
+                <p id="dataRec" name="dataReq"></p>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <script>
     function enviarDados() {
@@ -32,10 +86,11 @@
 
         $("#dataRec").html("Carregando as Paradas... Isso pode demorar um pouquinho...");
 
-        if (gameTag !== null && gameTag !== 'undefined') {
+        if (gameTag !== null && gameTag !== 'undefined' && gameTag !== undefined) {
 
             if (gameTag.value === "") {
                 alert("digite seu battleTag");
+                $("#dataRec").html("");
                 return;
             }
 

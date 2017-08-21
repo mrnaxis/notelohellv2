@@ -9,7 +9,87 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <style type="text/css">
+        body{
+            background-color:#f7fff7;
+        }
+        .supernav{
+            display: inline-block;
+            width: 100%;
+            background-color:#011627;
+        }
+        .supernav ul{
+            list-style-type:none;
+            text-decoration: none;
+            display: inline;
+            margin:0;
+            padding:0;
+            padding-right: 1em;
+            padding-left: 1em;
+        }
+        .supernav li{
+            display: inline-block;
+            width: 150px;
+            height: 70px;
+            text-align: center;
+            margin:0;
+        }
+        .supernav li a{
+            text-decoration:none;
+            display: block;
+            margin: 0;
+            padding-top: 17%;
+            height: 100%;
+            width: 100%;
+            color: #eaeaea;
+            transition: background-color 1s;
+        }
+        .supernav .logo li a {
+            display:block;
+            text-decoration:none;
+            display: block;
+            margin: 0;
+            padding-top: 17%;
+            height: 100%;
+            width: 100%;
+            color: #eaeaea;
+        }
+        .supernav li a:hover{
+            background-color: #2274a5;
+        }
+        .supernav .esq{
+            float:left;
+        }
+        .supernav .dir{
+            float:right;
+            clear:left;
+        }
+        .botaotine{
+            background-color: #292f36;
+            margin: 15px;
+            color: #eaeaea;
+            transition: background-color 1s;
+        }
+        .botaotine:hover{
+            background-color: #001E35;
+        }
+    </style>
+    <div class="supernav">
+        <ul class="logo left"><li>@Html.ActionLink("LogoAqui", "Index", "Home")</li></ul>
+        <ul class="dir">
+        @if (Session["Player"] == null)
+        {
+            <li>@Html.ActionLink("Sign in", "Login", "Auth")</li>
+            <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Sign in", "BeholderUser", "Auth")</li>
+            <li>@Html.ActionLink("Sign out", "LogOff", "Auth")</li>
+        }
+        </ul>
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-top hide">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -40,13 +120,21 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <style type="text/css">
+        .footer-conf{
+            background-color:#011627;
+            color: #eaeaea;
+            height:100%;
+        }
+    </style>
+    <!--<div class="container body-content">-->
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    <div class="footer-conf">
+        <footer class="container">
+            <p>@DateTime.Now.Year - Made With &hearts; by Us.</p>
         </footer>
     </div>
+    <!--</div>-->
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
