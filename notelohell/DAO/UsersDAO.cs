@@ -38,14 +38,18 @@ namespace notelohell.DAO
 
             return usuario;
         }
+        
         public void AlterarUsuario(UsersModel user)//precisa de um usuario inteiro
         {
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
             filter = builder.Eq("Email", user.Email);
-            var doc = new BsonDocument {//colocar campos editaveis aqui
-                                        
-                                      };
+            var doc = new BsonDocument
+            {//colocar campos editaveis aqui
+                { "nome", user.Nome },
+                {"Pwsin",user.Pwsin },
+                {"gametag",user.GameTag }                                           
+            };
             conf.Alterar(filter, collection,doc);
         }
     }
