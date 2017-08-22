@@ -71,7 +71,7 @@ namespace notelohell.Models
         public void AlterarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel user = dao.BuscarUsuario(Email, null);
+            UsersModel user = dao.BuscarUsuario(Email);
             if(user != null)
             {
                 dao.AlterarUsuario(this);

@@ -19,7 +19,7 @@ namespace notelohell.DAO
             conf.SalvarCollection(user, collection);
         }
 
-        public UsersModel BuscarUsuario(string login, string senha)
+        public UsersModel BuscarUsuario(string login, string senha = null)
         {
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
