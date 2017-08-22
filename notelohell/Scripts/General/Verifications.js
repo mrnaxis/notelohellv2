@@ -11,3 +11,12 @@ function checkCampos(input1, input2, modo) {
         }
     }
 }
+
+function dateValid(inputDate) {
+    var dataOficial = inputDate.value.split('/');
+    var data = new Date(dataOficial[1] + '/' + dataOficial[0] + '/' + dataOficial[2]);
+
+    if (isNaN(data.getMilliseconds()))
+        return false;
+    return true;
+}

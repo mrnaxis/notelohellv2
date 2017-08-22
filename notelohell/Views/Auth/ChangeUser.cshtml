@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "ChangeUser";
+}
+
+<div class="container">
+    <h2>ChangeUser</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <img src="" />
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <form action="">
+                    <div class="form-horizontal">
+                        <label for="nome_Behold">Nome:</label><input type="text" class="form-control" id="nome_Behold" value="@Model.Nome" /><br />
+                        <label for="tag_Behold">Tag:</label><input type="text" class="form-control" id="tag_Behold" value="@Model.GameTag" /><br />
+                        <label for="E-mail_Behold">E-mail:</label><input type="text" class="form-control" id="email_Behold" value="@Model.Email" /><br />
+                        <label for="Birth_Behold">Data de Nascimento:</label><input type="text" class="form-control" id="birth_Behold" value="@Model.BirthDate.ToString("dd/MM/yyyy")" />
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Aplicar" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
