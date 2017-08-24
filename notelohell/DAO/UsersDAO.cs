@@ -45,10 +45,13 @@ namespace notelohell.DAO
             FilterDefinition<UsersModel> filter;
             filter = builder.Eq("Email", user.Email);
             var doc = new BsonDocument
-            {//colocar campos editaveis aqui
-                { "nome", user.Nome },
-                {"Pwsin",user.Pwsin },
-                {"gametag",user.GameTag }                                           
+            {{"$set",new BsonDocument{
+                {"Nome", user.Nome },
+                {"Login", user.Email},
+                {"BirthDate",user.BirthDate },
+                {"Gametag",user.GameTag }
+                }
+              }
             };
             conf.Alterar(filter, collection,doc);
         }
