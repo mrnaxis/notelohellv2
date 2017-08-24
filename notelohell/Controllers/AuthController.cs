@@ -36,18 +36,6 @@ namespace notelohell.Controllers
             return View();
         }
 
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult RegistrarUsuario(UsersModel user)
-        {
-            //fazer validações antes
-            if (!ModelState.IsValid)
-                return View();
-
-            user.GravarUsuario();
-            return RedirectToAction("Index", "Home");
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ValidateLogin(string login, string senha)
