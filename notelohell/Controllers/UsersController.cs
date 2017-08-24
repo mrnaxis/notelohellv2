@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using notelohell.Models;
+using notelohell.DAO;
 using notelohell.AuthControl;
 
 
@@ -52,7 +53,11 @@ namespace notelohell.Controllers
         [HttpPost]
         public ActionResult ChangeUserSend(UsersModel user)
         {
-            return RedirectToAction("BeholderUser", "Auth"); ;
+            //if (!ModelState.IsValid)
+            //    return View();
+
+            user.AlterarUsuario();
+            return RedirectToAction("BeholderUser", "Auth");
         }
 
         [IDRequired]
