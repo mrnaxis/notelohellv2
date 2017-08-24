@@ -1,26 +1,60 @@
-﻿
+﻿@model notelohell.Models.UsersModel
 @{
     ViewBag.Title = "ChangeUser";
 }
 
 <div class="container">
-    <h2>ChangeUser</h2>
+    <h2>Alterar Cadastro</h2>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <img src="" />
             </div>
             <div class="col-xs-12 col-md-6">
-                <form action="">
+                <form action="~/Auth/ChangeUserSend/" method="post" >
+                    @Html.AntiForgeryToken()
                     <div class="form-horizontal">
-                        <label for="nome_Behold">Nome:</label><input type="text" class="form-control" id="nome_Behold" value="@Model.Nome" /><br />
-                        <label for="tag_Behold">Tag:</label><input type="text" class="form-control" id="tag_Behold" value="@Model.GameTag" /><br />
-                        <label for="E-mail_Behold">E-mail:</label><input type="text" class="form-control" id="email_Behold" value="@Model.Email" /><br />
-                        <label for="Birth_Behold">Data de Nascimento:</label><input type="text" class="form-control" id="birth_Behold" value="@Model.BirthDate.ToString("dd/MM/yyyy")" />
+                        <div class="form-group">
+                            <label for="nome_Behold">Nome:</label><input type="text" name="Nome" class="form-control" id="nome_Behold" value="@Model.Nome" /><br />
+                            <label for="tag_Behold">Tag:</label><input type="text" name="GameTag" class="form-control" id="tag_Behold" value="@Model.GameTag" /><br />
+                            <label for="E-mail_Behold">E-mail:</label><input type="text" name="Email" class="form-control" id="email_Behold" value="@Model.Email" /><br />
+                        </div>
+                        <div id="birthGroup" class="form-group">
+                            <label for="Birth_Behold">Data de Nascimento:</label><input type="text" name="BirthDate" class="form-control" id="birth_Behold" value="@Model.BirthDate.ToString("dd/MM/yyyy")" /><br />
+                            <span id="birthGroupError" class="help-block hide">Data Inválida</span>
+                            <input type="submit" class="btn btn-primary" id="btn_alterar_user" value="Aplicar" />
+                        </div>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Aplicar" />
+                    <br />
                 </form>
+                <br />
             </div>
+            <script type="text/javascript">
+                $("#btn_alterar_user").on("click", function () {
+                    return dateValid($("#birth_Behold")[0]);
+                });
+
+                $("#birth_Behold").on("keydown", function (date) {
+                    if (date.key.search(/Backspace|Del/g) === -1) {
+                        if ((date.target.value.length === 2 || date.target.value.length === 5) && date.key.search('/') === -1)
+                            date.target.value += '/';
+
+                        if (date.key.search(/\D/g) >= 0 && date.key.search("/") === -1)
+                            return false;
+                    }
+                });
+
+                $("#birth_Behold").on("blur", function (date) {
+                    if (!dateValid(date.target)) {
+                        $("#birthGroup").addClass('has-error');
+                        $("#birthGroupError").removeClass('hide');
+                    }
+                    else {
+                        $("#birthGroup").removeClass('has-error');
+                        $("#birthGroupError").addClass('hide');
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
