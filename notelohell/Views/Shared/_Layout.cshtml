@@ -42,7 +42,7 @@
             height: 100%;
             width: 100%;
             color: #eaeaea;
-            transition: background-color 1s;
+            transition: background-color 0.3s;
         }
         .supernav .logo li a {
             display:block;
@@ -54,7 +54,8 @@
             width: 100%;
             color: #eaeaea;
         }
-        .supernav li a:hover{
+        .supernav .logo li a:hover{}
+        .supernav .dir li a:hover{
             background-color: #2274a5;
         }
         .supernav .esq{
@@ -89,37 +90,6 @@
         }
         </ul>
     </div>
-    <div class="navbar navbar-inverse navbar-fixed-top hide">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (Session["Player"] == null)
-                    {
-                        <li>@Html.ActionLink("Sign in", "Login", "Auth")</li>
-                        <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Sign in", "BeholderUser", "Auth")</li>
-                        <li>@Html.ActionLink("Sign out","LogOff","Auth")</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
     <style type="text/css">
         .footer-conf{
             background-color:#011627;
@@ -129,6 +99,7 @@
     </style>
     <!--<div class="container body-content">-->
         @RenderBody()
+    <script type="text/javascript" src="~/Scripts/General/Verifications.js?1"></script>
     <div class="footer-conf">
         <footer class="container">
             <p>@DateTime.Now.Year - Made With &hearts; by Us.</p>

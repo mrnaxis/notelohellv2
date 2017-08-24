@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "ChangePass";
+}
+
+<div class="container">
+    <h2>Altere a Senha</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <img src="" />
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <form action="~/Auth/ChangePassSend/" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="pass_old">Senha Atual:</label>
+                            <input type="password" name="pass_old" class="form-control" id="pass_old" /><br />
+                        </div>
+                        <div id="pwGroup" class="form-group">
+                            <label for="pass_new">Nova Senha:</label>
+                            <input type="password" name="pass_new" class="form-control" id="pass_new" /><br />
+                            <label for="pass_new_conf">Senha Atual:</label>
+                            <input type="password" name="pass_new_conf" class="form-control" id="pass_new_conf" /><br />
+                            <span id="pwGroupError" class="help-block hide">Senhas não conferem</span>
+                            <input type="submit" class="btn btn-primary" id="btn_alterar_senha" value="Alterar Senha" />
+                        </div>
+                    </div>
+                </form>
+                <br />
+            </div>
+            <script type="text/javascript">
+                $("#btn_alterar_senha").on("click", function () {
+                    return checkCampos($("#pass_new"), $("#pass_new_conf"), 0) && $("#pass_old").val() !== "";
+                });
+                $("#pass_new_conf").on("input", function () {
+                    if (!checkCampos($("#pass_new"), $("#pass_new_conf"), 0)) {
+                        $("#pwGroup").addClass('has-error');
+                        $("#pwGroupError").removeClass('hide');
+                    }
+                    else {
+                        $("#pwGroup").removeClass('has-error');
+                        $("#pwGroupError").addClass('hide');
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+
