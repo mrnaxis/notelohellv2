@@ -25,45 +25,11 @@ namespace notelohell.Controllers
         }
 
         [IDRequired]
-        public ActionResult ChangeUser()
-        {
-            UsersModel us = (UsersModel)Session["Player"];
-            return View(us);
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult ChangeUserSend(UsersModel user)
-        {
-            return RedirectToAction("BeholderUser", "Auth"); ;
-        }
-
-        [IDRequired]
-        public ActionResult ChangePass()
-        {
-            return View();
-        }
-
-        public ActionResult ChangePassSend(string pass_old, string pass_new)
-        {
-            if (!string.IsNullOrEmpty(pass_old) || !string.IsNullOrEmpty(pass_new))
-            {
-                return View("ChangePass");
-            }
-            return RedirectToAction("BeholderUser", "Auth");
-        }
-
-        [IDRequired]
         public ActionResult LogOff()
         {
             Session["Player"] = null;
             Session["PlayerName"] = null;
             return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult Registro()
-        {
-            return View();
         }
 
         [HttpPost]
