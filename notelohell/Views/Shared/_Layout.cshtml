@@ -81,7 +81,7 @@
         @if (Session["Player"] == null)
         {
             <li>@Html.ActionLink("Sign in", "Login", "Auth")</li>
-            <li>@Html.ActionLink("Registrar", "Registro", "Auth")</li>
+            <li>@Html.ActionLink("Registrar", "Registro", "Users",null,null)</li>
         }
         else
         {
