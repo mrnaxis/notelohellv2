@@ -27,10 +27,12 @@ namespace notelohell.App_Start
             var col = _database.GetCollection<T>(collection);
             return col.Find(filter).ToList();
         }
-        public void Alterar<T>(FilterDefinition<T> filter,string collection,BsonDocument doc)
+        public BsonDocument Alterar<T>(FilterDefinition<T> filter,string collection,BsonDocument doc)
         {
             var col = _database.GetCollection<T>(collection);
-            col.UpdateOne(filter,doc);
+            var options = new FindOneAndUpdateOptions<T>();
+            options.ReturnDocument = ReturnDocument.After;
+            return col.FindOneAndUpdate(filter,doc,options).ToBsonDocument();
         }
     }
 }

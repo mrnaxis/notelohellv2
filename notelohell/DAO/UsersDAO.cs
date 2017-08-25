@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 using notelohell.Models;
@@ -39,7 +40,7 @@ namespace notelohell.DAO
             return usuario;
         }
         
-        public void AlterarUsuario(UsersModel user)//precisa de um usuario inteiro
+        public UsersModel AlterarUsuario(UsersModel user)//precisa de um usuario inteiro
         {
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
@@ -49,11 +50,26 @@ namespace notelohell.DAO
                 {"Nome", user.Nome },
                 {"Email", user.Email},
                 {"BirthDate",user.BirthDate },
-                {"Gametag",user.GameTag }
+                {"GameTag",user.GameTag }
                 }
               }
             };
-            conf.Alterar(filter, collection,doc);
+
+            return BsonSerializer.Deserialize<UsersModel> (conf.Alterar(filter, collection,doc));
+        }
+        public UsersModel AlterarSenhaUsuario(UsersModel user)//precisa de um usuario inteiro
+        {
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
+            filter = builder.Eq("Email", user.Email);
+            var doc = new BsonDocument
+            {{"$set",new BsonDocument{
+                {"Pwsin", user.Pwsin}
+                }
+              }
+            };
+
+            return BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
         }
     }
 }

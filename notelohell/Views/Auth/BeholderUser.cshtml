@@ -18,7 +18,8 @@
                     <label for="Birth_Behold">Data de Nascimento:</label><input type="text" class="form-control" id="birth_Behold" value="@Model.BirthDate.ToString("dd/MM/yyyy")" readonly /><br />
                     <label for="Senha_Behold">Senha:</label><input type="password" class="form-control" id="pw_Behold" value="gofuckyourself"readonly /><br />
                     @Html.ActionLink("Alterar Dados Cadastrais", "ChangeUser", "Users",null, new { Class = "btn btn-primary" }) &nbsp;
-                    @Html.ActionLink("Alterar Senha", "ChangePass", "Users", null, new { Class = "btn btn-primary" })
+                    @Html.ActionLink("Alterar Senha", "ChangePass", "Users", null, new { Class = "btn btn-primary" }) &nbsp;
+                    @Html.ActionLink("Desativar",null, null, null, new { Class = "btn btn-primary" })
                 </div>
                 <br />
             </div>
