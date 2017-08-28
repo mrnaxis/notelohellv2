@@ -43,6 +43,15 @@ function ShowErrorDate() {
     return resp;
 }
 
+function ShowErrorNames(JField, msg, idgroup) {
+    var resp = checkCampos(JField, "", 2);
+    if (!resp)
+        ManageError(idgroup, msg, false);
+    else
+        ManageError(idgroup, "  ", true);
+    return resp;
+}
+
 function ShowErrorPW() {
     var resp1 = checkCampos($("#pass_reg"), $("#passConf_reg"), 0)
     var resp2 = checkCampos($("#pass_reg"), $("#passConf_reg"), 3);
@@ -50,12 +59,21 @@ function ShowErrorPW() {
         ManageError("pwGroup", !resp2?"Senhas não conferem":"Digite uma senha", false);
     else
         ManageError("pwGroup", "  ", true);
-    return resp1 || resp2;
+    return resp1 && resp2;
+}
+
+function ShowErrors() {
+    var errors = ShowErrorDate() || ShowErrorNames($("#email_reg"), "Email Obrigatório", "mailGroup") ||
+        ShowErrorNames($("#gametag_reg"), "GameTag Obrigatória", "tagGroup") ||
+        ShowErrorNames($("#nome_reg"), "Nome Obrigatório", "nameGroup") ||
+        ShowErrorPW();
+    return errors;
 }
 
 $(document).ready(function () {
     $("#btn_registrar").on("click", function () {
-        return ShowErrorDate() && ShowErrorPW();
+        var res = ShowErrors();
+        return res;
     });
 
     $("#passConf_reg").on("input", function () {

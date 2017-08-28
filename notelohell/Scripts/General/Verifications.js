@@ -8,7 +8,7 @@ function checkCampos(input1, input2, modo) {
         switch (modo) {
             case 0: return input1.val() === input2.val();
             case 1: return input1.val() !== input2.val();
-            case 2: return (input1.val() !== "" || input2.val() !== "");
+            case 2: return (input1.val() !== "");
             case 3: return (input1.val() !== "" && input2.val() !== "");
         }
     }

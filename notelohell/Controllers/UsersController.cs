@@ -20,17 +20,17 @@ namespace notelohell.Controllers
 
         public ActionResult Registro()
         {
-            UsersModel us = new UsersModel();
-            return View(us);
+            //UsersModel us = new UsersModel();
+            return View();
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult RegistrarUsuario(UsersModel user)
+        public ActionResult Registro(UsersModel user)
         {
             //fazer validações antes
             if (!ModelState.IsValid)
-                return View("Registro",user);
+                return View(user);
 
             user.GravarUsuario();
             return RedirectToAction("Index", "Home");
