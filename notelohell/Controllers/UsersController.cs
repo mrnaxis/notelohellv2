@@ -67,13 +67,19 @@ namespace notelohell.Controllers
         {
             return View();
         }
-
+        [IDRequired]
+        [HttpPost]
         public ActionResult ChangePassSend(string pass_old, string pass_new)
         {
-            if (!string.IsNullOrEmpty(pass_old) || !string.IsNullOrEmpty(pass_new))
+            if (string.IsNullOrEmpty(pass_old) || string.IsNullOrEmpty(pass_new))
             {
                 return View("ChangePass");
             }
+            UsersModel usuario = (UsersModel)Session["Player"];
+            usuario.Pwsin = pass_new;
+            usuario = usuario.AlterarSenhaUsuario();
+            if (usuario != null)
+                Session["Player"]=usuario;
             return RedirectToAction("BeholderUser", "Auth");
         }
     }

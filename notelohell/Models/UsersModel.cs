@@ -68,14 +68,25 @@ namespace notelohell.Models
 
         }
 
-        public void AlterarUsuario()
+        public UsersModel AlterarUsuario()
+        {
+            UsersDAO dao = new UsersDAO();
+            UsersModel user = dao.BuscarUsuario(Email);//talvez não precise mais
+            if(user != null)
+            {
+               user = dao.AlterarUsuario(this);
+            }
+            return user;
+        }
+        public UsersModel AlterarSenhaUsuario()
         {
             UsersDAO dao = new UsersDAO();
             UsersModel user = dao.BuscarUsuario(Email);
-            if(user != null)
+            if (user != null)
             {
-                dao.AlterarUsuario(this);
+                user = dao.AlterarSenhaUsuario(this);
             }
+            return user;
         }
     }
 }
