@@ -8,73 +8,47 @@
         <div class="form-horizontal">
             <form action="/Users/RegistrarUsuario/" method="POST">
                 @Html.AntiForgeryToken()
-                <div class="form-group">
+                <div id="nameGroup" class="form-group">
                     <h2>Registro</h2>
                     <label for="nome_reg">Nome:</label>
                     <input type="text" id="nome_reg" name="Nome" class="form-control" />
+                    <span id="nameGroupError" class="help-block hide"></span>
+                    @Html.ValidationMessageFor(x => x.Nome)
+                </div>
                     <br />
+                <div id="mailGroup" class="form-group">
                     <label for="email_reg">E-mail:</label>
                     <input type="email" id="email_reg" name="Email" class="form-control" />
+                    <span id="mailGroupError" class="help-block hide"></span>
+                    @Html.ValidationMessageFor(x => x.Email)
+                </div>
                     <br />
+                <div id="tagGroup" class="form-group">
                     <label for="gametag_reg">Gametag:</label>
                     <input type="text" id="gametag_reg" name="gameTag" class="form-control" />
-                    <br />
+                    <span id="tagGroupError" class="help-block hide"></span>
+                    @Html.ValidationMessageFor(x => x.GameTag)
                 </div>
+                    <br />
                 <div id="birthGroup" class="form-group">
                     <label for="birth_reg">Data de Nascimento</label>
-                    <input type="text" maxlength="10" id="birth_reg" name="birthDate" class="form-control" />
-                    <span id="birthGroupError" class="help-block hide">Data Inválida</span>
+                    <input type="text" maxlength="10" id="birth_reg"  name="birthDate" class="form-control" />
+                    <span id="birthGroupError" class="help-block hide"></span>
+                    @Html.ValidationMessageFor(x => x.BirthDate)
                 </div>
                 <div id="pwGroup" class="form-group">
                     <label for="pass_reg">Senha:</label>
-                    <input type="password" id="pass_reg" class="form-control" />
+                    <input type="password" id="pass_reg"  class="form-control" />
                     <br />
                     <label for="passConf_reg">Confirme a senha:</label>
-                    <input type="password" id="passConf_reg" name="Pwsin" class="form-control" />
-                    <span id="pwGroupError" class="help-block hide">Senhas não conferem</span>
+                    <input type="password" id="passConf_reg" name="Pwsin"  class="form-control" />
+                    <span id="pwGroupError" class="help-block hide"></span>
+                    @Html.ValidationMessageFor(x => x.Pwsin)
                     <br />
                     <input type="submit" class="btn btn-default" id="btn_registrar" value="Registrar" />
                 </div>
             </form>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#btn_registrar").on("click", function () {
-                    return checkCampos($("#pass_reg"), $("#passConf_reg"), 0) && dateValid($("#birth_reg")[0]);
-                });
-
-                $("#passConf_reg").on("input", function () {
-                    if (!checkCampos($("#pass_reg"), $("#passConf_reg"), 0)) {
-                        $("#pwGroup").addClass('has-error');
-                        $("#pwGroupError").removeClass('hide');
-                    }
-                    else {
-                        $("#pwGroup").removeClass('has-error');
-                        $("#pwGroupError").addClass('hide');
-                    }
-                });
-
-                $("#birth_reg").on("keydown", function (date) {
-                    if (date.key.search(/Backspace|Del/g) === -1) {
-                        if ((date.target.value.length === 2 || date.target.value.length === 5) && date.key.search('/') === -1)
-                            date.target.value += '/';
-
-                        if (date.key.search(/\D/g) >= 0 && date.key.search("/") === -1)
-                            return false;
-                    }
-                });
-
-                $("#birth_reg").on("blur", function (date) {
-                    if (!dateValid(date.target)) {
-                        $("#birthGroup").addClass('has-error');
-                        $("#birthGroupError").removeClass('hide');
-                    }
-                    else {
-                        $("#birthGroup").removeClass('has-error');
-                        $("#birthGroupError").addClass('hide');
-                    }
-                });
-            });
-        </script>
+        <script type="text/javascript" src="~/Scripts/General/UsersValidations.js"></script>
     </div>
 </div>

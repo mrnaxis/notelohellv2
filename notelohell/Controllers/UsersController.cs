@@ -20,7 +20,8 @@ namespace notelohell.Controllers
 
         public ActionResult Registro()
         {
-            return View();
+            UsersModel us = new UsersModel();
+            return View(us);
         }
 
         [ValidateAntiForgeryToken]
@@ -29,7 +30,7 @@ namespace notelohell.Controllers
         {
             //fazer validações antes
             if (!ModelState.IsValid)
-                return View();
+                return View("Registro",user);
 
             user.GravarUsuario();
             return RedirectToAction("Index", "Home");
@@ -53,10 +54,11 @@ namespace notelohell.Controllers
         [HttpPost]
         public ActionResult ChangeUserSend(UsersModel user)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
+            if (!ModelState.IsValid)
+                return View(user);
 
             user.AlterarUsuario();
+            Session["Player"] = user.BuscarUsuario();
             return RedirectToAction("BeholderUser", "Auth");
         }
 

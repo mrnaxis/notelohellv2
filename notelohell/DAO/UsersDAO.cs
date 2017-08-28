@@ -47,9 +47,9 @@ namespace notelohell.DAO
             var doc = new BsonDocument
             {{"$set",new BsonDocument{
                 {"Nome", user.Nome },
-                {"Login", user.Email},
+                {"Email", user.Email},
                 {"BirthDate",user.BirthDate },
-                {"Gametag",user.GameTag }
+                {"GameTag",user.GameTag }
                 }
               }
             };
