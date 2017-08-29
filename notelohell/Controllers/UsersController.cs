@@ -20,7 +20,6 @@ namespace notelohell.Controllers
 
         public ActionResult Registro()
         {
-            //UsersModel us = new UsersModel();
             return View();
         }
 
@@ -33,6 +32,9 @@ namespace notelohell.Controllers
                 return View(user);
 
             user.GravarUsuario();
+            Session["Player"] = Session["PlayerName"] = null;
+            Session["Player"] = user;
+            Session["PlayerName"] = user.Email;
             return RedirectToAction("Index", "Home");
         }
 
@@ -43,6 +45,7 @@ namespace notelohell.Controllers
             user.Pwsin = senha;
             user.BuscarUsuario();
         }
+
         [IDRequired]
         public ActionResult ChangeUser()
         {
@@ -52,13 +55,15 @@ namespace notelohell.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult ChangeUserSend(UsersModel user)
+        public ActionResult ChangeUser(UsersModel user)
         {
+            ModelState.Remove("Pwsin");
             if (!ModelState.IsValid)
                 return View(user);
 
             user.AlterarUsuario();
             Session["Player"] = user.BuscarUsuario();
+            TempData["ErrorALT"] = "Alterações Salvas =D";
             return RedirectToAction("BeholderUser", "Auth");
         }
 
@@ -67,9 +72,10 @@ namespace notelohell.Controllers
         {
             return View();
         }
+
         [IDRequired]
         [HttpPost]
-        public ActionResult ChangePassSend(string pass_old, string pass_new)
+        public ActionResult ChangePass(string pass_old, string pass_new)
         {
             if (string.IsNullOrEmpty(pass_old) || string.IsNullOrEmpty(pass_new))
             {
@@ -78,8 +84,11 @@ namespace notelohell.Controllers
             UsersModel usuario = (UsersModel)Session["Player"];
             usuario.Pwsin = pass_new;
             usuario = usuario.AlterarSenhaUsuario();
+
+            TempData["ErrorALT"] = "Senha Alterada com Sucesso!";
+
             if (usuario != null)
-                Session["Player"]=usuario;
+                Session["Player"] = usuario;
             return RedirectToAction("BeholderUser", "Auth");
         }
     }

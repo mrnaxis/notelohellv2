@@ -63,11 +63,17 @@ function ShowErrorPW() {
 }
 
 function ShowErrors() {
-    var errors = ShowErrorDate() || ShowErrorNames($("#email_reg"), "Email Obrigatório", "mailGroup") ||
-        ShowErrorNames($("#gametag_reg"), "GameTag Obrigatória", "tagGroup") ||
-        ShowErrorNames($("#nome_reg"), "Nome Obrigatório", "nameGroup") ||
-        ShowErrorPW();
-    return errors;
+    var errors = [ShowErrorDate(), ShowErrorNames($("#email_reg"), "Email Obrigatório", "mailGroup"),
+        ShowErrorNames($("#gametag_reg"), "GameTag Obrigatória", "tagGroup"),
+        ShowErrorNames($("#nome_reg"), "Nome Obrigatório", "nameGroup"),
+        ShowErrorPW()];
+
+    for (var i = 0; i < errors.length; i++) {
+        if (!errors[i])
+            return false;
+    }
+    return true;
+    
 }
 
 $(document).ready(function () {

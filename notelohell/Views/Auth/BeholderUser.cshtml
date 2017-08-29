@@ -7,6 +7,14 @@
     <h2>Seus Dados</h2>
     <div class="container-fluid">
         <div class="row">
+            @if (!string.IsNullOrEmpty((string)TempData["ErrorALT"] ?? ""))
+            {
+                <script type="text/javascript">
+                    setTimeout(function () { $("#info-suc").hide('slow'); @TempData.Remove("ErrorALT"); }, 5000);
+                </script>
+                <div id="info-suc" class="alert alert-success">@TempData["ErrorALT"]</div>
+            }
+
             <div class="col-xs-12 col-md-6">
                 <img src="" />
             </div>
