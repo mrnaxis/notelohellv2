@@ -15,9 +15,20 @@ namespace notelohell.DAO
     {
         protected static string collection = "usuarios";
         protected static MongoConfig conf = new MongoConfig();
-        public void GravarUsuario(UsersModel user)
+        public bool GravarUsuario(UsersModel user)
         {
-            conf.SalvarCollection(user, collection);
+            bool salvou = false;
+            try
+            {
+                conf.SalvarCollection(user, collection);//qualquer merda que der no banco vai retornar exception
+                salvou = true;
+            }
+
+            catch (Exception ex)
+            {
+                string erro = ex.Message;
+            }
+            return salvou;
         }
 
         public UsersModel BuscarUsuario(string login, string senha = null)
@@ -25,9 +36,9 @@ namespace notelohell.DAO
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
             if (senha == null)
-                filter = builder.Eq("Email", login);
+                filter = builder.Eq("Email", login) & builder.Eq("Ativo",true);
             else
-                filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha);
+                filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha) & builder.Eq("Ativo", true);
 
             List<UsersModel> doc = conf.Buscar(filter, collection);
             UsersModel usuario;
@@ -42,20 +53,31 @@ namespace notelohell.DAO
         
         public UsersModel AlterarUsuario(UsersModel user)//precisa de um usuario inteiro
         {
+            UsersModel ret;
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
-            filter = builder.Eq("Email", user.Email);
+            filter = builder.Eq("_id",user.Id);
             var doc = new BsonDocument
             {{"$set",new BsonDocument{
                 {"Nome", user.Nome },
                 {"Email", user.Email},
                 {"BirthDate",user.BirthDate },
-                {"GameTag",user.GameTag }
+                {"GameTag",user.GameTag },
+                {"Ativo",user.Ativo }
                 }
               }
             };
-
-            return BsonSerializer.Deserialize<UsersModel> (conf.Alterar(filter, collection,doc));
+            try
+            {
+                return BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
+            }
+            catch(Exception ex)
+            {
+                string erro = ex.Message;
+                ret = null;
+            }
+            return ret;
+            
         }
         public UsersModel AlterarSenhaUsuario(UsersModel user)//precisa de um usuario inteiro
         {

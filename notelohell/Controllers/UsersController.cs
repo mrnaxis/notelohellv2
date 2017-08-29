@@ -55,14 +55,15 @@ namespace notelohell.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [IDRequired]
         public ActionResult ChangeUser(UsersModel user)
         {
             ModelState.Remove("Pwsin");
             if (!ModelState.IsValid)
                 return View(user);
-
-            user.AlterarUsuario();
-            Session["Player"] = user.BuscarUsuario();
+            UsersModel userOn = (UsersModel)Session["Player"];
+            user.Id = userOn.Id;            
+            Session["Player"] = user.AlterarUsuario();
             TempData["ErrorALT"] = "Alterações Salvas =D";
             return RedirectToAction("BeholderUser", "Auth");
         }
@@ -75,6 +76,7 @@ namespace notelohell.Controllers
 
         [IDRequired]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangePass(string pass_old, string pass_new)
         {
             if (string.IsNullOrEmpty(pass_old) || string.IsNullOrEmpty(pass_new))
@@ -90,6 +92,13 @@ namespace notelohell.Controllers
             if (usuario != null)
                 Session["Player"] = usuario;
             return RedirectToAction("BeholderUser", "Auth");
+        }
+        [IDRequired]
+        public ActionResult Desativar()
+        {
+            UsersModel user = (UsersModel)Session["Player"];
+            user.DesativarUsuario();
+            return RedirectToAction("LogOff","Auth");
         }
     }
 }

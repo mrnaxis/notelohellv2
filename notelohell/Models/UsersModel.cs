@@ -28,41 +28,32 @@ namespace notelohell.Models
         [Required]
         public bool Ativo { get; private set; }
 
-        public UsersModel()
-        {
-            this.Id = ObjectId.GenerateNewId();
-            this.Ativo = true;
-        }
+        public UsersModel() { }
 
         public bool GravarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel usercheck = dao.BuscarUsuario(this.Email, null);
+            UsersModel usercheck = dao.BuscarUsuario(Email, null);
             if (usercheck == null)
             {
-                dao.GravarUsuario(this);
-                return true;
+                Id = ObjectId.GenerateNewId();
+                Ativo = true;
             }
-            return false;
+            return dao.GravarUsuario(this);
         }
 
         public UsersModel BuscarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel userFind = dao.BuscarUsuario(this.Email, this.Pwsin);
-
-            if (userFind == null)
-                return null;
-            else
-                return userFind;
+            return dao.BuscarUsuario(Email, Pwsin);
         }
         public void DesativarUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel user = dao.BuscarUsuario(this.Email, this.Pwsin);
+            UsersModel user = dao.BuscarUsuario(Email, Pwsin);
             if (user != null)
             {
-                this.Ativo = false;
+                Ativo = false;
                 dao.AlterarUsuario(this);
             }
 
@@ -70,23 +61,13 @@ namespace notelohell.Models
 
         public UsersModel AlterarUsuario()
         {
-            UsersDAO dao = new UsersDAO();
-            UsersModel user = dao.BuscarUsuario(Email);//talvez não precise mais
-            if(user != null)
-            {
-               user = dao.AlterarUsuario(this);
-            }
-            return user;
+            UsersDAO dao = new UsersDAO();         
+            return dao.AlterarUsuario(this);
         }
         public UsersModel AlterarSenhaUsuario()
         {
             UsersDAO dao = new UsersDAO();
-            UsersModel user = dao.BuscarUsuario(Email);
-            if (user != null)
-            {
-                user = dao.AlterarSenhaUsuario(this);
-            }
-            return user;
+            return dao.AlterarSenhaUsuario(this);
         }
     }
 }
