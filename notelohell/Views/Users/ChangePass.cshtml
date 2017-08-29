@@ -14,9 +14,10 @@
                 <form action="~/Users/ChangePass/" method="post">
                     @Html.AntiForgeryToken()
                     <div class="form-horizontal">
-                        <div class="form-group">
+                        <div id="pwOldGroup" class="form-group">
                             <label for="pass_old">Senha Atual:</label>
                             <input type="password" name="pass_old" class="form-control" id="pass_old" /><br />
+                            <span class="error-fus">@ViewBag.PwError</span>
                         </div>
                         <div id="pwGroup" class="form-group">
                             <label for="pass_new">Nova Senha:</label>

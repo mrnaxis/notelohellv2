@@ -10,7 +10,7 @@
             @if (!string.IsNullOrEmpty((string)TempData["ErrorALT"] ?? ""))
             {
                 <script type="text/javascript">
-                    setTimeout(function () { $("#info-suc").hide('slow'); @TempData.Remove("ErrorALT"); }, 5000);
+                    setTimeout(function () { $("#info-suc").hide('slow');  }, 5000);
                 </script>
                 <div id="info-suc" class="alert alert-success">@TempData["ErrorALT"]</div>
             }

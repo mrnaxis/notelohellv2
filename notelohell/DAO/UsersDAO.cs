@@ -63,7 +63,7 @@ namespace notelohell.DAO
                 {"Email", user.Email},
                 {"BirthDate",user.BirthDate },
                 {"GameTag",user.GameTag },
-                {"Ativo",user.Ativo }
+                {"Ativo", user.Ativo }
                 }
               }
             };

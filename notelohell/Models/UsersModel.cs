@@ -26,7 +26,7 @@ namespace notelohell.Models
         [Required]
         public DateTime BirthDate { get; set; }
         [Required]
-        public bool Ativo { get; private set; }
+        public bool Ativo { get; set; }
 
         public UsersModel() { }
 
@@ -64,10 +64,21 @@ namespace notelohell.Models
             UsersDAO dao = new UsersDAO();         
             return dao.AlterarUsuario(this);
         }
+
         public UsersModel AlterarSenhaUsuario()
         {
             UsersDAO dao = new UsersDAO();
             return dao.AlterarSenhaUsuario(this);
+        }
+
+        public bool Equals(UsersModel user)
+        {
+            if (!((user.Ativo.Equals(this.Ativo)) && (user.BirthDate.ToString("dd/MM/yyyy").Equals(this.BirthDate.ToString("dd/MM/yyyy")))
+                && (user.Email.Equals(this.Email)) && (user.GameTag.Equals(this.GameTag))
+                && (user.Nome.Equals(this.Nome)) && (user.Pwsin.Equals(this.Pwsin))
+                && (user.Id.Equals(this.Id))))
+                return false;
+            return true;
         }
     }
 }

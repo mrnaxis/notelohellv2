@@ -58,13 +58,19 @@ namespace notelohell.Controllers
         [IDRequired]
         public ActionResult ChangeUser(UsersModel user)
         {
+            TempData.Remove("ErrorALT");
             ModelState.Remove("Pwsin");
             if (!ModelState.IsValid)
                 return View(user);
             UsersModel userOn = (UsersModel)Session["Player"];
-            user.Id = userOn.Id;            
+            user.Id = userOn.Id;
+            user.Ativo = userOn.Ativo;
+            user.Pwsin = userOn.Pwsin;         
             Session["Player"] = user.AlterarUsuario();
-            TempData["ErrorALT"] = "Alterações Salvas =D";
+            if (!userOn.Equals(user))
+            {
+                TempData["ErrorALT"] = "Alterações Salvas =D";
+            }
             return RedirectToAction("BeholderUser", "Auth");
         }
 
@@ -79,18 +85,30 @@ namespace notelohell.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangePass(string pass_old, string pass_new)
         {
+            TempData.Remove("ErrorALT");
             if (string.IsNullOrEmpty(pass_old) || string.IsNullOrEmpty(pass_new))
             {
+                ViewBag.PwError = "Todos os campos são obrigatórios";
                 return View("ChangePass");
             }
+
             UsersModel usuario = (UsersModel)Session["Player"];
-            usuario.Pwsin = pass_new;
-            usuario = usuario.AlterarSenhaUsuario();
+            if (usuario.Pwsin.Equals(pass_old))
+            {
+                usuario.Pwsin = pass_new;
 
-            TempData["ErrorALT"] = "Senha Alterada com Sucesso!";
+                usuario = usuario.AlterarSenhaUsuario();
 
-            if (usuario != null)
-                Session["Player"] = usuario;
+                TempData["ErrorALT"] = "Senha Alterada com Sucesso!";
+
+                if (usuario != null)
+                    Session["Player"] = usuario;
+            }
+            else
+            {
+                ViewBag.PwError = "Digite a sua senha atual corretamente";
+                return View("ChangePass");
+            }
             return RedirectToAction("BeholderUser", "Auth");
         }
         [IDRequired]
