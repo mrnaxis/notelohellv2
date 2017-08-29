@@ -3,10 +3,28 @@
     ViewBag.Title = "BeholderUser";
 }
 
+<div class="modal fade" id="modDisable" tabindex="-1" role="dialog" aria-labelledby="lbModalDesat">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lbModalDesat">Desativação de Conta.</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Deseja realmente desativar a sua conta?</h4>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Desativar Conta", "Desativar", "Users", null, new { Class = "btn btn-danger", id = "disable_pop" })
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <h2>Seus Dados</h2>
     <div class="container-fluid">
         <div class="row">
+            
             @if (!string.IsNullOrEmpty((string)TempData["ErrorALT"] ?? ""))
             {
                 <script type="text/javascript">
@@ -27,11 +45,18 @@
                     <label for="Senha_Behold">Senha:</label><input type="password" class="form-control" id="pw_Behold" value="gofuckyourself"readonly /><br />
                     @Html.ActionLink("Alterar Dados Cadastrais", "ChangeUser", "Users",null, new { Class = "btn btn-primary" }) &nbsp;
                     @Html.ActionLink("Alterar Senha", "ChangePass", "Users", null, new { Class = "btn btn-primary" }) &nbsp;
-                    @Html.ActionLink("Desativar","Desativar", "Users", null, new { Class = "btn btn-primary" })
+                    <button id="modalDesat" class="btn btn-danger">Desativar Conta</button>
                 </div>
                 <br />
             </div>
         </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#modalDesat").on("click", function () {
+                    $("#modDisable").modal("toggle");
+                });
+            });
+        </script>
     </div>
 </div>
 
