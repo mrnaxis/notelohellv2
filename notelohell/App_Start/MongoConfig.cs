@@ -10,12 +10,11 @@ namespace notelohell.App_Start
 {
     public class MongoConfig
     {
-        protected IMongoClient _client { get; set; }
-        protected IMongoDatabase _database { get; set; }
+        protected static IMongoClient _client = new MongoClient("mongodb://localhost:27017");
+        protected static IMongoDatabase _database = _client.GetDatabase("notel");
         public MongoConfig()
         {
-            _client = new MongoClient("mongodb://localhost:27017");
-            _database = _client.GetDatabase("notel");
+
         }
         public void SalvarCollection(object doc,string collection)
         {

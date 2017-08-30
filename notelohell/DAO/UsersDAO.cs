@@ -36,9 +36,9 @@ namespace notelohell.DAO
             var builder = Builders<UsersModel>.Filter;
             FilterDefinition<UsersModel> filter;
             if (senha == null)
-                filter = builder.Eq("Email", login) & builder.Eq("Ativo",true);
+                filter = builder.Eq("Email", login);
             else
-                filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha) & builder.Eq("Ativo", true);
+                filter = builder.Eq("Email", login) & builder.Eq("Pwsin", senha);
 
             List<UsersModel> doc = conf.Buscar(filter, collection);
             UsersModel usuario;

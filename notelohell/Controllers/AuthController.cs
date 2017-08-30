@@ -54,16 +54,23 @@ namespace notelohell.Controllers
 
             us = us.BuscarUsuario();
 
-            if (us != null)
+            if (us != null && us.Ativo)
             {
                 Session["Player"] = us;
                 Session["PlayerName"] = us.Email;
                 return RedirectToAction("Index", "Home");
             }
-            else
+            else if(us == null)
             {
                 ViewBag.Error = true;
                 ViewBag.ErrorMsg = "Usuário ou Senha Invalidos.";
+                ViewBag.Email = login;
+                return View("Login");
+            }
+            else
+            {
+                ViewBag.Error = true;
+                ViewBag.ErrorMsg = "Usuário inativo.";
                 ViewBag.Email = login;
                 return View("Login");
             }
