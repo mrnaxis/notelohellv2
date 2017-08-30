@@ -17,14 +17,14 @@
                         <div id="pwOldGroup" class="form-group">
                             <label for="pass_old">Senha Atual:</label>
                             <input type="password" name="pass_old" class="form-control" id="pass_old" /><br />
-                            <span class="error-fus">@ViewBag.PwError</span>
+                            <div class="alet alert-danger">@ViewBag.PwError</div>
                         </div>
                         <div id="pwGroup" class="form-group">
                             <label for="pass_new">Nova Senha:</label>
                             <input type="password" name="pass_new" class="form-control" id="pass_new" /><br />
                             <label for="pass_new_conf">Senha Atual:</label>
                             <input type="password" name="pass_new_conf" class="form-control" id="pass_new_conf" /><br />
-                            <span id="pwGroupError" class="help-block hide">Senhas não conferem</span>
+                            <div id="pwGroupError" class="alet alert-danger hide">Senhas não conferem</div>
                             <input type="submit" class="btn btn-primary" id="btn_alterar_senha" value="Alterar Senha" />
                         </div>
                     </div>
