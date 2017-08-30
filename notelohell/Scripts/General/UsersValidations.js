@@ -34,8 +34,8 @@ function ManageError(idgroup, idgroupmessage, hide) {
 
 //Checking Sector, please show up your ID.
 
-function ShowErrorDate() {
-    var resp = dateValid($("#birth_reg")[0])
+function ShowErrorDate(JQueryObj) {
+    var resp = dateValid(JQueryObj[0])
     if (!resp)
         ManageError("birthGroup", "Data Inválida", false);
     else
@@ -63,46 +63,14 @@ function ShowErrorPW() {
 }
 
 function ShowErrors() {
-    var errors = [ShowErrorDate(), ShowErrorNames($("#email_reg"), "Email Obrigatório", "mailGroup"),
+    var errors = [ShowErrorDate($("#birth_reg")), ShowErrorNames($("#email_reg"), "Email Obrigatório", "mailGroup"),
         ShowErrorNames($("#gametag_reg"), "GameTag Obrigatória", "tagGroup"),
         ShowErrorNames($("#nome_reg"), "Nome Obrigatório", "nameGroup"),
         ShowErrorPW()];
 
     for (var i = 0; i < errors.length; i++) {
-        if (!errors[i])
+        if (!errors[i] && typeof errors[i] !== 'undefined')
             return false;
     }
     return true;
-    
 }
-
-$(document).ready(function () {
-    $("#btn_registrar").on("click", function () {
-        var res = ShowErrors();
-        return res;
-    });
-
-    $("#passConf_reg").on("input", function () {
-        if (!checkCampos($("#pass_reg"), $("#passConf_reg"), 0))
-            ManageError("pwGroup", "Senhas não conferem", false);
-        else
-            ManageError("pwGroup", "  ", true);
-    });
-
-    $("#birth_reg").on("keydown", function (date) {
-        if (date.key.search(/Backspace|Del|Tab/g) === -1) {
-            if ((date.target.value.length === 2 || date.target.value.length === 5) && date.key.search('/') === -1)
-                date.target.value += '/';
-
-            if (date.key.search(/\D/g) >= 0 && date.key.search("/") === -1)
-                return false;
-        }
-    });
-
-    $("#birth_reg").on("blur", function (date) {
-        if (!dateValid(date.target))
-            ManageError("birthGroup", "Data Inválida", false);
-        else
-            ManageError("birthGroup", "  ", true);
-    });
-});
