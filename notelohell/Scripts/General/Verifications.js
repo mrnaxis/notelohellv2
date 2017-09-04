@@ -13,12 +13,12 @@ function checkCampos(input1, input2, modo) {
         }
     }
 }
-
+//for dd/mm/yyyy format
 function dateValid(inputDate) {
     var dataOficial = inputDate.value.split('/');
     var data = new Date(dataOficial[1] + '/' + dataOficial[0] + '/' + dataOficial[2]);
-
-    if (isNaN(data.getMilliseconds()))
+    var day = data.getDate();
+    if (isNaN(data.getMilliseconds()) || day !== Number(dataOficial[0]))
         return false;
     return true;
 }
