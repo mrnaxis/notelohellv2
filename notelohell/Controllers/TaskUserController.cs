@@ -9,7 +9,7 @@ namespace notelohell.Controllers
     public class TaskUserController : Controller
     {
         // GET: TaskUser
-        public ActionResult Index()
+        public ActionResult TaskUser()
         {
             return View();
         }

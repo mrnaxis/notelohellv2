@@ -87,6 +87,7 @@
         }
         else
         {
+            <li>@Html.ActionLink("Minhas Tarefas", "TaskUser", "TaskUser")</li>
             <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Sign in", "BeholderUser", "Auth")</li>
             <li>@Html.ActionLink("Sign out", "LogOff", "Auth")</li>
         }
