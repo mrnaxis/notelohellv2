@@ -1,10 +1,6 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "TaskUser";
 }
-
-
-
 <style>
     .list-main {
 
@@ -23,31 +19,19 @@
         padding: 15px;
         margin-left: 35px;
     }
+    .comp {
+        color: #9fe700;
+    }
 </style>
 <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $(".sort-derp").sortable();
-        $("#addTk").on("click", function () {
-            $(".list-view").append("<li class='task-fixed'><i class='comp'>Complete?</i> New Task</li>");
-        });
-        $(".task-fixed").on("click", function () {
-            var panelTask = $("#panel-task");
-            if (!panelTask.hasClass("hide"))
-                panelTask.addClass("hide");
-            //ativar o carregamento da tarefa
-            panelTask.removeClass("hide");
-        });
-    });
-</script>
 <div class="container">
     <h2>Minhas Tarefas</h2>
     <div class="row">
         <div class="col-md-12">
             <div class="list-main">
                 <ul class="list-view sort-derp">
-                    <li class="task-fixed"><i class="comp">Complete?</i> Potato</li>
-                    <li class="task-fixed"><i class="comp">Complete?</i> Bread</li>
+                    <li class="task-fixed"><i class="fa fa-2x fa-check comp"></i> Potato</li>
+                    <li class="task-fixed"><i class="fa fa-2x fa-check comp"></i> Bread</li>
                 </ul>
                 <input id="addTk" type="button"style="margin: 10px;" class="btn btn-default" value="Adicionar Tarefa" />
             </div>
@@ -55,7 +39,7 @@
         <div id="panel-task" class="col-md-12 hide">
             <div class="box-task">
                 <!-- Inserir Nome, desc, comentários, etc... -->
-                <i class="comp">Complete? </i>
+                <i class="fa fa-2x fa-check comp"> </i>
                 <input type="text" id="nameTask" class="form-control" value="Nova Tarefa" />
                 <br />
                 <textarea class="form-control" id="descTask" placeholder="Descrição..."></textarea>
@@ -63,4 +47,23 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            $(".sort-derp").sortable();
+
+            $("#addTk").on("click", function () {
+                $(".list-view").append("<li class='task-fixed'><i class='fa fa-2x fa-check'> </i> New Task</li>");
+                $(".task-fixed").click();
+            });
+
+            $(".task-fixed").on("click", function (event) {
+                var panelTask = $("#panel-task");
+                var e = event;
+                if (!panelTask.hasClass("hide"))
+                    panelTask.addClass("hide");
+                                
+                panelTask.removeClass("hide");
+            });
+        });
+    </script>
 </div>
