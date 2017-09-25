@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services;
+using notelohell.Models;
 
 namespace notelohell.Controllers
 {
@@ -19,5 +20,10 @@ namespace notelohell.Controllers
         //{
 
         //}
+
+        public JsonResult newTask(TaskUserModel task)
+        {
+            task.gravarTask();
+        }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using notelohell.DAO;
 
 namespace notelohell.Models
 {
@@ -21,6 +22,21 @@ namespace notelohell.Models
         public TaskUserModel()
         {
 
+        }
+
+        public string gravarTask()
+        {
+            string nomeRetorno = string.Empty;
+            TaskUserDAO dao = new TaskUserDAO();
+            TaskUserModel taskcheck = dao.BuscarTasks(EmailTask);
+            if (taskcheck == null)
+            {
+                Id = ObjectId.GenerateNewId();
+                nomeRetorno = dao.GravarTask(this);
+            }
+            else
+                nomeRetorno = dao.AdicionarTask(this);
+           return nomeRetorno;
         }
 
 
