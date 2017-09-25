@@ -30,8 +30,8 @@
         <div class="col-md-12">
             <div class="list-main">
                 <ul class="list-view sort-derp">
-                    <li class="task-fixed"><i class="fa fa-2x fa-check comp"></i> Potato</li>
-                    <li class="task-fixed"><i class="fa fa-2x fa-check comp"></i> Bread</li>
+                    <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Potato</e></li>
+                    <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Bread</e></li>
                 </ul>
                 <input id="addTk" type="button"style="margin: 10px;" class="btn btn-default" value="Adicionar Tarefa" />
             </div>
@@ -39,7 +39,16 @@
         <div id="panel-task" class="col-md-12 hide">
             <div class="box-task">
                 <!-- Inserir Nome, desc, comentários, etc... -->
-                <i class="fa fa-2x fa-check comp"> </i>
+                <div>
+                    <div class="col-md-9">
+                        <i class="fa fa-2x fa-check stTask"> </i>
+                    </div>
+                    <div class="col-md-3 form-inline">
+                        <label for="dataTask">Até:</label> <input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
+                    </div>
+                </div>
+                <input type="text" class="hidden" id="nameTaskOld"/>
+                <br />
                 <input type="text" id="nameTask" class="form-control" value="Nova Tarefa" />
                 <br />
                 <textarea class="form-control" id="descTask" placeholder="Descrição..."></textarea>
@@ -52,8 +61,30 @@
             $(".sort-derp").sortable();
 
             $("#addTk").on("click", function () {
-                $(".list-view").append("<li class='task-fixed'><i class='fa fa-2x fa-check'> </i> New Task</li>");
+                $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> New Task<e/></li>");
+                SaveData({ }, retNome());
                 $(".task-fixed").click();
+            });
+
+            $("#dataTask").on("blur", function (event) {
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), null, true, LoaderIndicator());
+            });
+
+            $("#nameTask").on("blur", function (event) {
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"),
+                    document.getElementById("nameTaskOld").value, true, LoaderIndicator(document.getElementById("nameTaskOld").value));
+            });
+
+            $("#descTask").on("blur", function (event) {
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), null, true, LoaderIndicator());
+            });
+
+            $(".fa-check").on("click", function (event) {
+                var e = event;
+                if (!$(e.currentTarget).hasClass("comp"))
+                    $(e.currentTarget).addClass("comp");
+                else
+                    $(e.currentTarget).removeClass("comp");
             });
 
             $(".task-fixed").on("click", function (event) {
@@ -61,9 +92,67 @@
                 var e = event;
                 if (!panelTask.hasClass("hide"))
                     panelTask.addClass("hide");
-                                
+                //exibir dados
+                GetData(e.currentTarget.textContent.trim());
                 panelTask.removeClass("hide");
             });
         });
+
+        function LoaderIndicator(indicator) {
+
+        }
+
+        function ObjMakerTask(nameTask, status, nameTaskOld, modAll, backtome) {
+            var objftw = {
+                "nameTask": nameTask,
+                "nameTaskOld": nameTaskOld,
+                "status": status,
+                "descTask": modAll ? document.getElementById("nameTask").value : null,
+                "dataTask": modAll ? document.getElementById("dataTask").value : null
+            };
+            SaveData(objftw, backtome(nameTaskOld !== null ? nameTaskOld : null));
+        }
+
+        function GetData(nameTask) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTask", "TaskUser")",
+                data: JSON.stringify({ nameTask: nameTask }),
+                contentType: "application/json",
+                dataType: "json",
+                success: LoadTask(),
+                error: LoadTask()
+            });
+        }
+
+        function LoadTask(data) {
+            if (typeof data !== "undefined") {
+                document.getElementById("nameTask").value = data.nameTask;
+                document.getElementById("nameTaskOld").value = data.nameTask;
+                document.getElementById("descTask").value = data.descTask;
+                document.getElementById("dataTask").value = data.dataTask;
+                if (data.status)
+                    $(".stTask").addClass("comp");
+            }
+        }
+
+        function SaveData(tasksUser, backtome) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTask", "TaskUser")",
+                data: JSON.stringify(tasksUser),
+                contentType: "application/json",
+                dataType: "json",
+                success: backtome,
+                error: null
+            });
+        }
+
+        function RetNome(newnome) {
+            if (typeof newnome !== "null" && typeof newnome !== "undefined") {
+                $(".newLife").val(newnome);
+                $(".newLife").removeClass(".newLife");
+            }
+        }
     </script>
 </div>

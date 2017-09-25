@@ -15,9 +15,9 @@ namespace notelohell.Controllers
             return View();
         }
 
-        //public JsonResult ChangeTask()
-        //{
-
-        //}
+        public JsonResult ChangeTask()
+        {
+            return Json(new { });
+        }
     }
 }
