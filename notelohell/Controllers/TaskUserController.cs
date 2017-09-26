@@ -16,14 +16,14 @@ namespace notelohell.Controllers
             return View();
         }
 
-        //public JsonResult ChangeTask()
-        //{
-
-        //}
-
         public JsonResult newTask(TaskUserModel task)
         {
             task.gravarTask();
+            return Json(new { });
+        }
+        public JsonResult ChangeTask()
+        {
+            return Json(new { });
         }
     }
 }
