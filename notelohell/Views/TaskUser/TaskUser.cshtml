@@ -69,7 +69,7 @@
 
             $("#addTk").on("click", function () {
                 $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> New Task<e/></li>");
-                SaveData({ }, RetNome());
+                SaveData({ Order: $(".list-view").find("li").length - 1 }, RetNome());
                 $(".task-fixed").click();
             });
 
