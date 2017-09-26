@@ -10,9 +10,6 @@ namespace notelohell.Models
 {
     public class TaskUserModel
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
-        public string EmailTask { get; set; }
         public int Order { get; set; }
         public string Nome { get; set; }
         public string Desc { get; set; }
@@ -28,19 +25,11 @@ namespace notelohell.Models
         {
             string nomeRetorno = string.Empty;
             TaskUserDAO dao = new TaskUserDAO();
-            List<TaskUserModel> taskcheck = dao.BuscarTasks(EmailTask);
-            if (taskcheck == null)
-            {
-                Id = ObjectId.GenerateNewId();
-                nomeRetorno = dao.GravarTask(this);
-            }
-            else
-            {
-                TaskUserModel retorno;
-                retorno = dao.AdicionarTask(this);
-                nomeRetorno = retorno.Nome;
-            }
             
+            TaskUserModel retorno;
+            retorno = dao.AdicionarTask(this);
+            nomeRetorno = retorno.Nome;
+                      
            return nomeRetorno;
         }
 

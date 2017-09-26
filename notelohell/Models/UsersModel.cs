@@ -27,6 +27,7 @@ namespace notelohell.Models
         public DateTime BirthDate { get; set; }
         [Required]
         public bool Ativo { get; set; }
+        public BsonArray tasks { get; set; }
 
         public UsersModel() { }
 
