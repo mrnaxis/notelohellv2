@@ -32,6 +32,13 @@
                 <ul class="list-view sort-derp">
                     <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Potato</e></li>
                     <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Bread</e></li>
+                    @if (ViewBag.Tasks != null)
+                    {
+                        foreach (var t in ViewBag.Tasks)
+                        {
+                            <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> t.Nome</e></li>
+                        }
+                    }
                 </ul>
                 <input id="addTk" type="button"style="margin: 10px;" class="btn btn-default" value="Adicionar Tarefa" />
             </div>
@@ -62,7 +69,7 @@
 
             $("#addTk").on("click", function () {
                 $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> New Task<e/></li>");
-                SaveData({ }, retNome());
+                SaveData({ }, RetNome());
                 $(".task-fixed").click();
             });
 
@@ -139,7 +146,7 @@
         function SaveData(tasksUser, backtome) {
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("ChangeTask", "TaskUser")",
+                url: "@Url.Action("newTask", "TaskUser")",
                 data: JSON.stringify(tasksUser),
                 contentType: "application/json",
                 dataType: "json",

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Services;
 using notelohell.Models;
+using notelohell.DAO;
 
 namespace notelohell.Controllers
 {
@@ -13,10 +14,13 @@ namespace notelohell.Controllers
         // GET: TaskUser
         public ActionResult TaskUser()
         {
+            //TaskUserDAO dao = new TaskUserDAO();
+            //List<TaskUserModel> tasks = dao.BuscarTasks(Session["PlayerName"].ToString() ?? "null");
+            //ViewBag.Task = tasks;
             return View();
         }
 
-        public JsonResult newTask(object json)
+        public JsonResult newTask(TaskUserModel task)
         {
             TaskUserModel task = (TaskUserModel)json;
             task.EmailTask = Session["PlayerName"].ToString();
