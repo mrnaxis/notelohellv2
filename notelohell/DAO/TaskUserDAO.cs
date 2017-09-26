@@ -26,8 +26,8 @@ namespace notelohell.DAO
                         {"Tasks",new BsonDocument
                             {
                                 {"Order",Tu.Order },
-                                { "Nome",Tu.Nome },
-                                {"Desc",Tu.Desc },
+                                { "Nome",Tu.Nome ?? ""},
+                                {"Desc",Tu.Desc ?? ""},
                                 {"Data", Tu.Data },
                                 {"Complete",Tu.Complete }
                             }
