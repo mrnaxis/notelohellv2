@@ -32,8 +32,8 @@ namespace notelohell.DAO
         public TaskUserModel AdicionarTask(TaskUserModel task,string email)
         {
             TaskUserModel ret;
-            var builder = Builders<TaskUserModel>.Filter;
-            FilterDefinition<TaskUserModel> filter;
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
             filter = builder.Eq("Email", email);
             var doc = new BsonDocument
             {
@@ -53,7 +53,8 @@ namespace notelohell.DAO
             };
             try
             {
-                return BsonSerializer.Deserialize<TaskUserModel>(conf.Alterar(filter, collection, doc));
+                var a = BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
+                return ret = a.Tasks.Last();
             }
             catch (Exception ex)
             {
