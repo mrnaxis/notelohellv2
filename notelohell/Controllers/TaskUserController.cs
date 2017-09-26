@@ -19,6 +19,7 @@ namespace notelohell.Controllers
         public JsonResult newTask(object json)
         {
             TaskUserModel task = (TaskUserModel)json;
+            task.EmailTask = Session["PlayerName"].ToString();
             task.gravarTask();
             return Json(new { });
         }
