@@ -30,7 +30,7 @@ namespace notelohell.DAO
             return nomeSalvo;
         }
 
-        public TaskUserModel BuscarTasks(string email, string nome = null)
+        public List<TaskUserModel> BuscarTasks(string email, string nome = null)
         {
             var builder = Builders<TaskUserModel>.Filter;
             FilterDefinition<TaskUserModel> filter;
@@ -40,14 +40,8 @@ namespace notelohell.DAO
                 filter = builder.Eq("EmailTask", email) & builder.Eq("Nome", nome);
 
             List<TaskUserModel> doc = conf.Buscar(filter, collection);
-            TaskUserModel task;
 
-            if (doc.Count > 0)
-                task = doc[0];
-            else
-                task = null;
-
-            return task;
+            return doc;
         }
         public TaskUserModel AdicionarTask(TaskUserModel task)
         {

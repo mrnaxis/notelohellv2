@@ -28,7 +28,7 @@ namespace notelohell.Models
         {
             string nomeRetorno = string.Empty;
             TaskUserDAO dao = new TaskUserDAO();
-            TaskUserModel taskcheck = dao.BuscarTasks(EmailTask);
+            List<TaskUserModel> taskcheck = dao.BuscarTasks(EmailTask);
             if (taskcheck == null)
             {
                 Id = ObjectId.GenerateNewId();
