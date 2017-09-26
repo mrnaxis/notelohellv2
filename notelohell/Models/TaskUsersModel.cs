@@ -35,7 +35,12 @@ namespace notelohell.Models
                 nomeRetorno = dao.GravarTask(this);
             }
             else
-                nomeRetorno = dao.AdicionarTask(this);
+            {
+                TaskUserModel retorno;
+                retorno = dao.AdicionarTask(this);
+                nomeRetorno = retorno.Nome;
+            }
+            
            return nomeRetorno;
         }
 
