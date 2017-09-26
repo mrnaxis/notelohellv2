@@ -21,13 +21,13 @@ namespace notelohell.Models
 
         }
 
-        public string gravarTask()
+        public string gravarTask(string email)
         {
             string nomeRetorno = string.Empty;
             TaskUserDAO dao = new TaskUserDAO();
             
             TaskUserModel retorno;
-            retorno = dao.AdicionarTask(this);
+            retorno = dao.AdicionarTask(this,email);
             nomeRetorno = retorno.Nome;
                       
            return nomeRetorno;

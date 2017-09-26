@@ -12,36 +12,9 @@ namespace notelohell.DAO
 {
     public class TaskUserDAO
     {
-        protected static string collection = "taskuser";
+        protected static string collection = "usuarios";
         protected static MongoConfig conf = new MongoConfig();
 
-        public string GravarTask(TaskUserModel Tu)
-        {
-            string nomeSalvo = "";
-            try
-            {
-                BsonDocument doc = new BsonDocument
-                    {
-                        {"Email",Tu.EmailTask},
-                        {"Tasks",new BsonDocument
-                            {
-                                {"Order",Tu.Order },
-                                { "Nome",Tu.Nome ?? ""},
-                                {"Desc",Tu.Desc ?? ""},
-                                {"Data", Tu.Data },
-                                {"Complete",Tu.Complete }
-                            }
-                        }
-                    };
-                conf.SalvarCollection(doc, collection);
-                nomeSalvo = Tu.Nome;
-            }
-            catch(Exception ex)
-            {
-
-            }
-            return nomeSalvo;
-        }
 
         public List<TaskUserModel> BuscarTasks(string email, string nome = null)
         {
@@ -56,15 +29,15 @@ namespace notelohell.DAO
 
             return doc;
         }
-        public TaskUserModel AdicionarTask(TaskUserModel task)
+        public TaskUserModel AdicionarTask(TaskUserModel task,string email)
         {
             TaskUserModel ret;
             var builder = Builders<TaskUserModel>.Filter;
             FilterDefinition<TaskUserModel> filter;
-            filter = builder.Eq("EmailTask", task.EmailTask);
+            filter = builder.Eq("Email", email);
             var doc = new BsonDocument
             {
-                { "$push",new BsonDocument{{"Email" ,task.EmailTask},
+                { "$push",new BsonDocument{
                     { "Tasks",
                         new BsonDocument
                         {
