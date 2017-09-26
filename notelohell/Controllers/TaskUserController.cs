@@ -16,8 +16,9 @@ namespace notelohell.Controllers
             return View();
         }
 
-        public JsonResult newTask(TaskUserModel task)
+        public JsonResult newTask(object json)
         {
+            TaskUserModel task = (TaskUserModel)json;
             task.gravarTask();
             return Json(new { });
         }
