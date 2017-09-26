@@ -20,7 +20,20 @@ namespace notelohell.DAO
             string nomeSalvo = "";
             try
             {
-                conf.SalvarCollection(Tu, collection);
+                BsonDocument doc = new BsonDocument
+                    {
+                        {"Email",Tu.EmailTask},
+                        {"Tasks",new BsonDocument
+                            {
+                                {"Order",Tu.Order },
+                                { "Nome",Tu.Nome },
+                                {"Desc",Tu.Desc },
+                                {"Data", Tu.Data },
+                                {"Complete",Tu.Complete }
+                            }
+                        }
+                    };
+                conf.SalvarCollection(doc, collection);
                 nomeSalvo = Tu.Nome;
             }
             catch(Exception ex)
@@ -51,11 +64,10 @@ namespace notelohell.DAO
             filter = builder.Eq("EmailTask", task.EmailTask);
             var doc = new BsonDocument
             {
-                { "$push",new BsonDocument{
+                { "$push",new BsonDocument{{"Email" ,task.EmailTask},
                     { "Tasks",
                         new BsonDocument
                         {
-                            {"EmailTask", task.EmailTask },
                             {"Order", task.Order},
                             {"Nome",task.Nome },
                             {"Desc",task.Desc },
