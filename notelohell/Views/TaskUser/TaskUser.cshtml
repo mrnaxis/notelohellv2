@@ -30,8 +30,6 @@
         <div class="col-md-12">
             <div class="list-main">
                 <ul class="list-view sort-derp">
-                    <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Potato</e></li>
-                    <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Bread</e></li>
                     @if (ViewBag.Task != null)
                     {
                         foreach (var t in ViewBag.Task)
@@ -54,8 +52,6 @@
                         <label for="dataTask">Até:</label> <input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
                     </div>
                 </div>
-                <input type="text" class="hidden" id="nameTaskOld"/>
-                <br />
                 <input type="text" id="nameTask" class="form-control" value="Nova Tarefa" />
                 <br />
                 <textarea class="form-control" id="descTask" placeholder="Descrição..."></textarea>
@@ -68,22 +64,21 @@
             $(".sort-derp").sortable();
 
             $("#addTk").on("click", function () {
-                $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> New Task<e/></li>");
+                $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> Nova Tarefa<e/></li>");
                 SaveData({ Order: $(".list-view").find("li").length - 1 }, RetNome());
                 $(".task-fixed").click();
             });
 
             $("#dataTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), null, true, LoaderIndicator());
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $("#nameTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"),
-                    document.getElementById("nameTaskOld").value, true, LoaderIndicator(document.getElementById("nameTaskOld").value));
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $("#descTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), null, true, LoaderIndicator());
+                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $(".fa-check").on("click", function (event) {
@@ -105,19 +100,18 @@
             });
         });
 
-        function LoaderIndicator(indicator) {
-
+        function LoaderIndicator() {
+            return null;
         }
 
-        function ObjMakerTask(nameTask, status, nameTaskOld, modAll, backtome) {
+        function ObjMakerTask(nameTask, status, modAll, backtome) {
             var objftw = {
-                "nameTask": nameTask,
-                "nameTaskOld": nameTaskOld,
-                "status": status,
-                "descTask": modAll ? document.getElementById("nameTask").value : null,
-                "dataTask": modAll ? document.getElementById("dataTask").value : null
+                "Nome": nameTask,
+                "Complete": status,
+                "Desc": modAll ? document.getElementById("nameTask").value : null,
+                "Data": modAll ? document.getElementById("dataTask").value : null
             };
-            SaveData(objftw, backtome(nameTaskOld !== null ? nameTaskOld : null));
+            ChangeData(objftw, backtome);
         }
 
         function GetData(nameTask) {
@@ -141,6 +135,18 @@
             }
         }
 
+        function ChangeData(tasksUser, backtome) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTask", "TaskUser")",
+                data: JSON.stringify(tasksUser),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) { backtome(data) },
+                error: null
+            });
+        }
+
         function SaveData(tasksUser, backtome) {
             $.ajax({
                 type: "POST",
@@ -148,7 +154,7 @@
                 data: JSON.stringify(tasksUser),
                 contentType: "application/json",
                 dataType: "json",
-                success: backtome,
+                success: function (data) { backtome(data) },
                 error: null
             });
         }

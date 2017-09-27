@@ -33,7 +33,7 @@ namespace notelohell.Controllers
             TaskUserModel t = new TaskUserModel();
             List<TaskUserModel> lt = t.BuscarTasks(Session["PlayerName"].ToString(), nome);
             if (lt.Count == 1)
-                return Json(lt[0]);
+                return Json(new { Nome = lt[0].Nome, Desc = lt[0].Desc, Data = lt[0].Data.ToString("dd/MM/yyyy"), Complete=lt[0].Complete });
             return null;
         }
 
