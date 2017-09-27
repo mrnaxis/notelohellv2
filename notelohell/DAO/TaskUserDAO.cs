@@ -94,7 +94,7 @@ namespace notelohell.DAO
             {{"$set",new BsonDocument{
                 {"Tasks."+indice.ToString()+".Order", task.Order },
                 {"Tasks."+indice.ToString()+".Nome", task.Nome},
-                {"Tasks."+indice.ToString()+".Desc",task.Desc ?? "" },
+                {"Tasks."+indice.ToString()+".Desc",task.Desc },
                 {"Tasks."+indice.ToString()+".Data",task.Data },
                 {"Tasks."+indice.ToString()+".Complete", task.Complete }
                 }
@@ -115,11 +115,10 @@ namespace notelohell.DAO
 
         public bool SeekAndDestroy(string email, TaskUserModel task)
         {
-            List<TaskUserModel> tasks = BuscarTasks(email);
-            int indice = tasks.FindIndex(0, name => name.Nome == task.Nome);
-            TaskUserModel ret;
-            var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", task.Nome));
+            var filter = new BsonDocument("Email", email);
+            var update = Builders<UsersModel>.Update.PullFilter("Tasks",
+                Builders<TaskUserModel>.Filter.Eq("Nome", task.Nome));
+            conf.Excluir(filter, update,collection);
             return false;
         }
 
