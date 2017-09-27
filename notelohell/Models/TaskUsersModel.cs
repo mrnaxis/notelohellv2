@@ -40,5 +40,11 @@ namespace notelohell.Models
             return ltd;
         }
 
+        public TaskUserModel AlterarTask(string email)
+        {
+            TaskUserDAO taskDao = new TaskUserDAO();
+            return taskDao.AlterarTask(email, this);
+        }
+
     }
 }

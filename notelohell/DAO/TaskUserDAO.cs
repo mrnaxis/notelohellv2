@@ -76,5 +76,37 @@ namespace notelohell.DAO
             }
             return ret;
         }
+        public TaskUserModel AlterarTask(string email,TaskUserModel task)
+        {
+            TaskUserModel ret;
+            var builder = Builders<BsonDocument>.Filter;
+            var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", task.Nome));
+            var doc = new BsonDocument
+            {{"$set",new BsonDocument{
+                {"Tasks.Order", task.Order },
+                {"Tasks.Nome", task.Nome},
+                {"Tasks.Desc",task.Desc },
+                {"Tasks.Data",task.Data },
+                {"Tasks.Complete", task.Complete }
+                }
+              }
+            };
+            try
+            {
+                var a = BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
+                ret = a.Tasks[0];
+            }
+            catch (Exception ex)
+            {
+                string erro = ex.Message;
+                ret = null;
+            }
+            return ret;
+        }
+
+        public bool SeekAndDestroy()
+        {
+            return false;
+        }
     }
 }
