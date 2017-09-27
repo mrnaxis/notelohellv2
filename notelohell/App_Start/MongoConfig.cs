@@ -33,5 +33,10 @@ namespace notelohell.App_Start
             options.ReturnDocument = ReturnDocument.After;
             return col.FindOneAndUpdate(filter,doc,options).ToBsonDocument();
         }
+        public BsonDocument Excluir<T>(FilterDefinition<T> filter,UpdateDefinition<T> up, string collection)
+        {
+            var col = _database.GetCollection<T>(collection);
+            return col.FindOneAndUpdate(filter, up).ToBsonDocument();
+        }
     }
 }
