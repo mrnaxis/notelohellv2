@@ -72,16 +72,18 @@ namespace notelohell.DAO
         }
         public TaskUserModel AlterarTask(string email,TaskUserModel task)
         {
+            List<TaskUserModel> tasks = BuscarTasks(email,task.Nome);
+            int indice = RetornaIndice(tasks, task);
             TaskUserModel ret;
             var builder = Builders<BsonDocument>.Filter;
             var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", task.Nome));
             var doc = new BsonDocument
             {{"$set",new BsonDocument{
-                {"Tasks.Order", task.Order },
-                {"Tasks.Nome", task.Nome},
-                {"Tasks.Desc",task.Desc },
-                {"Tasks.Data",task.Data },
-                {"Tasks.Complete", task.Complete }
+                {"Tasks"+indice.ToString()+".Order", task.Order },
+                {"Tasks"+indice.ToString()+".Nome", task.Nome},
+                {"Tasks"+indice.ToString()+".Desc",task.Desc },
+                {"Tasks"+indice.ToString()+".Data",task.Data },
+                {"Tasks"+indice.ToString()+".Complete", task.Complete }
                 }
               }
             };
@@ -101,6 +103,11 @@ namespace notelohell.DAO
         public bool SeekAndDestroy()
         {
             return false;
+        }
+
+        private int RetornaIndice(List<TaskUserModel> tasks,TaskUserModel task)
+        {
+            return tasks.IndexOf(task);
         }
     }
 }
