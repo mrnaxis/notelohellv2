@@ -34,7 +34,8 @@
                     {
                         foreach (var t in ViewBag.Task)
                         {
-                            <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> @t.Nome</e></li>
+                            var st = t.Complete?"comp":"";
+                            <li><i class="fa fa-2x fa-check @st"></i><e class="task-fixed"> @t.Nome</e></li>
                         }
                     }
                 </ul>
@@ -72,15 +73,15 @@
             });
 
             $("#dataTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
+                ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $("#nameTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
+                ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $("#descTask").on("blur", function (event) {
-                ObjMakerTask(document.getElementById("nameTask").value, $("stTask").hasClass("comp"), true, LoaderIndicator());
+                ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $(".fa-check").on("click", function (event) {
@@ -89,6 +90,7 @@
                     $(e.currentTarget).addClass("comp");
                 else
                     $(e.currentTarget).removeClass("comp");
+                ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
             });
 
             $(".fa-trash").on("click", function (event) {

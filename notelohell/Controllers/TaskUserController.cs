@@ -24,8 +24,7 @@ namespace notelohell.Controllers
         [IDRequired]
         public JsonResult newTask(TaskUserModel task)
         {
-            //TaskUserModel task = (TaskUserModel)json;
-            // Session["PlayerName"].ToString()??"";
+            task.Nome = "Nova Tarefa";
             task.gravarTask(Session["PlayerName"].ToString());
             return Json(new { });
         }

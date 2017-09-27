@@ -51,8 +51,11 @@ namespace notelohell.DAO
 
             List<TaskUserModel> checkPrev = BuscarTasks(email, task.Nome);
 
-            if (checkPrev.Count > 0)
-                task.Nome = task.Nome + checkPrev.Count;
+            if (checkPrev != null)
+            {
+                if (checkPrev.Count > 0)
+                    task.Nome = task.Nome + task.GetHashCode();
+            }
 
             var doc = new BsonDocument
             {
@@ -94,7 +97,7 @@ namespace notelohell.DAO
             {{"$set",new BsonDocument{
                 {"Tasks."+indice.ToString()+".Order", task.Order },
                 {"Tasks."+indice.ToString()+".Nome", task.Nome},
-                {"Tasks."+indice.ToString()+".Desc",task.Desc },
+                {"Tasks."+indice.ToString()+".Desc",task.Desc ?? ""},
                 {"Tasks."+indice.ToString()+".Data",task.Data },
                 {"Tasks."+indice.ToString()+".Complete", task.Complete }
                 }
