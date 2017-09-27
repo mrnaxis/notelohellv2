@@ -41,7 +41,6 @@ namespace notelohell.Controllers
 
         public JsonResult ChangeTask(TaskUserModel task)
         {
-
             task.AlterarTask(Session["PlayerName"].ToString());
             return Json(new { });
         }
