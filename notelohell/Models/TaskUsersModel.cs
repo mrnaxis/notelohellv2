@@ -46,5 +46,10 @@ namespace notelohell.Models
             return taskDao.AlterarTask(email, this);
         }
 
+        public bool SeekAndDestroy(string email, TaskUserModel t)
+        {
+            TaskUserDAO td = new TaskUserDAO();
+            return td.SeekAndDestroy(email, t); ;
+        }
     }
 }

@@ -45,11 +45,12 @@
             <div class="box-task">
                 <!-- Inserir Nome, desc, comentários, etc... -->
                 <div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <i class="fa fa-2x fa-check stTask"> </i>
                     </div>
-                    <div class="col-md-3 form-inline">
+                    <div class="col-md-4 form-inline">
                         <label for="dataTask">Até:</label> <input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
+                        <i class="fa fa-2x fa-trash" aria-hidden="true"></i>
                     </div>
                 </div>
                 <input type="text" id="nameTask" class="form-control" value="Nova Tarefa" />
@@ -89,6 +90,12 @@
                     $(e.currentTarget).removeClass("comp");
             });
 
+            $(".fa-trash").on("click", function (event) {
+                var e = event;
+                if (document.getElementById("nameTask").value !== typeof "undefined")
+                    SeekAndDestroy({"Nome":document.getElementById("nameTask").value});
+            });
+
             $(".task-fixed").on("click", function (event) {
                 var panelTask = $("#panel-task");
                 var e = event;
@@ -99,7 +106,7 @@
                 panelTask.removeClass("hide");
             });
         });
-
+                
         function LoaderIndicator() {
             return null;
         }
@@ -108,7 +115,7 @@
             var objftw = {
                 "Nome": nameTask,
                 "Complete": status,
-                "Desc": modAll ? document.getElementById("nameTask").value : null,
+                "Desc": modAll ? document.getElementById("descTask").innerText : null,
                 "Data": modAll ? document.getElementById("dataTask").value : null
             };
             ChangeData(objftw, backtome);
@@ -123,6 +130,10 @@
                 success: function (data) { LoadTask(data) },
                 error: LoadTask()
             });
+        }
+
+        function SeekAndDestroy(tasksUser) {
+
         }
 
         function LoadTask(data) {

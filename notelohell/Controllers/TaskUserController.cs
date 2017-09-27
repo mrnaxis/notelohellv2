@@ -44,5 +44,13 @@ namespace notelohell.Controllers
             task.AlterarTask(Session["PlayerName"].ToString());
             return Json(new { });
         }
+
+        public JsonResult SeekAndDestroy(string Nome)
+        {
+            TaskUserModel t = new TaskUserModel();
+            t.Nome = Nome;
+            bool result = t.SeekAndDestroy(Session["PlayerName"].ToString(), t);
+            return Json(new { Result = result });
+        }
     }
 }
