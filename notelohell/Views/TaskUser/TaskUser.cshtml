@@ -94,7 +94,7 @@
             $(".fa-trash").on("click", function (event) {
                 var e = event;
                 if (document.getElementById("nameTask").value !== typeof "undefined")
-                    SeekAndDestroy({"Nome":document.getElementById("nameTask").value});
+                    SeekAndDestroy(document.getElementById("nameTask").value);
             });
 
             $(".task-fixed").on("click", function (event) {
@@ -134,8 +134,15 @@
             });
         }
 
-        function SeekAndDestroy(tasksUser) {
-
+        function SeekAndDestroy(taskName) {
+            $.ajax({
+            type: "POST",
+            url: "@Url.Action("SeekAndDestroy", "TaskUser")",
+            data: JSON.stringify({ nome: taskName }),
+            contentType: "application/json",
+            success: function (data) {  },
+            error: LoadTask()
+        });
         }
 
         function LoadTask(data) {
