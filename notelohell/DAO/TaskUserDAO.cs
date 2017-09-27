@@ -94,7 +94,7 @@ namespace notelohell.DAO
             {{"$set",new BsonDocument{
                 {"Tasks."+indice.ToString()+".Order", task.Order },
                 {"Tasks."+indice.ToString()+".Nome", task.Nome},
-                {"Tasks."+indice.ToString()+".Desc",task.Desc },
+                {"Tasks."+indice.ToString()+".Desc",task.Desc ?? "" },
                 {"Tasks."+indice.ToString()+".Data",task.Data },
                 {"Tasks."+indice.ToString()+".Complete", task.Complete }
                 }

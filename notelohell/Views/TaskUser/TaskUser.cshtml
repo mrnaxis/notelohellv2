@@ -116,8 +116,9 @@
             var objftw = {
                 "Nome": nameTask,
                 "Complete": status,
-                "Desc": modAll ? document.getElementById("descTask").innerText : null,
-                "Data": modAll ? document.getElementById("dataTask").value : null
+                "Desc": modAll ? document.getElementById("descTask").value : null,
+                "Data": modAll ? document.getElementById("dataTask").value : null,
+                "nome_old": modAll ? document.getElementById("nameTaskOld").value : null
             };
             ChangeData(objftw, backtome);
         }
