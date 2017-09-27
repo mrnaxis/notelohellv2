@@ -33,6 +33,12 @@ namespace notelohell.Models
            return nomeRetorno;
         }
 
+        public List<TaskUserModel> BuscarTasks(string email, string nome = null)
+        {
+            TaskUserDAO td = new TaskUserDAO();
+            List<TaskUserModel> ltd = td.BuscarTasks(email, nome);
+            return ltd;
+        }
 
     }
 }

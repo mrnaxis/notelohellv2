@@ -14,9 +14,9 @@ namespace notelohell.Controllers
         // GET: TaskUser
         public ActionResult TaskUser()
         {
-            //TaskUserDAO dao = new TaskUserDAO();
-            //List<TaskUserModel> tasks = dao.BuscarTasks(Session["PlayerName"].ToString() ?? "null");
-            //ViewBag.Task = tasks;
+            TaskUserModel t = new TaskUserModel();
+            List<TaskUserModel> tasks = t.BuscarTasks(Session["PlayerName"].ToString());
+            ViewBag.Task = tasks;
             return View();
         }
 
@@ -27,6 +27,16 @@ namespace notelohell.Controllers
             task.gravarTask(Session["PlayerName"].ToString());
             return Json(new { });
         }
+
+        public JsonResult SearchTask(string nome)
+        {
+            TaskUserModel t = new TaskUserModel();
+            List<TaskUserModel> lt = t.BuscarTasks(Session["PlayerName"].ToString(), nome);
+            if (lt.Count == 1)
+                return Json(lt[0]);
+            return null;
+        }
+
         public JsonResult ChangeTask()
         {
             return Json(new { });

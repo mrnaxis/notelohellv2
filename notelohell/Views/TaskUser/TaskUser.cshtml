@@ -32,11 +32,11 @@
                 <ul class="list-view sort-derp">
                     <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Potato</e></li>
                     <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> Bread</e></li>
-                    @if (ViewBag.Tasks != null)
+                    @if (ViewBag.Task != null)
                     {
-                        foreach (var t in ViewBag.Tasks)
+                        foreach (var t in ViewBag.Task)
                         {
-                            <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> t.Nome</e></li>
+                            <li><i class="fa fa-2x fa-check"></i><e class="task-fixed"> @t.Nome</e></li>
                         }
                     }
                 </ul>
@@ -123,22 +123,20 @@
         function GetData(nameTask) {
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("ChangeTask", "TaskUser")",
-                data: JSON.stringify({ nameTask: nameTask }),
+                url: "@Url.Action("SearchTask", "TaskUser")",
+                data: JSON.stringify({ nome: nameTask }),
                 contentType: "application/json",
-                dataType: "json",
-                success: LoadTask(),
+                success: function (data) { LoadTask(data) },
                 error: LoadTask()
             });
         }
 
         function LoadTask(data) {
             if (typeof data !== "undefined") {
-                document.getElementById("nameTask").value = data.nameTask;
-                document.getElementById("nameTaskOld").value = data.nameTask;
-                document.getElementById("descTask").value = data.descTask;
-                document.getElementById("dataTask").value = data.dataTask;
-                if (data.status)
+                document.getElementById("nameTask").value = data.Nome;
+                document.getElementById("descTask").value = data.Desc;
+                document.getElementById("dataTask").value = data.Data;
+                if (data.Complete)
                     $(".stTask").addClass("comp");
             }
         }

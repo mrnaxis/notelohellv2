@@ -6,7 +6,6 @@ using notelohell.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace notelohell.DAO
 {
@@ -18,14 +17,22 @@ namespace notelohell.DAO
 
         public List<TaskUserModel> BuscarTasks(string email, string nome = null)
         {
-            var builder = Builders<TaskUserModel>.Filter;
-            FilterDefinition<TaskUserModel> filter;
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
+            List<TaskUserModel> doc;
             if (nome == null)
+            {
                 filter = builder.Eq("Email", email);
+                doc = conf.Buscar(filter, collection)[0].Tasks;
+            }
             else
-                filter = builder.Eq("EmailTask", email) & builder.Eq("Nome", nome);
-
-            List<TaskUserModel> doc = conf.Buscar(filter, collection);
+            {
+                filter = builder.Eq("Email", email) & builder.Eq("Tasks.Nome", nome);
+                doc = conf.Buscar(filter, collection)[0].Tasks;
+                doc = (from task in doc
+                      where task.Nome == nome
+                      select task).ToList();
+            }
 
             return doc;
         }
@@ -42,7 +49,7 @@ namespace notelohell.DAO
                         new BsonDocument
                         {
                             {"Order", task.Order},
-                            {"Nome",task.Nome ?? ""},
+                            {"Nome",task.Nome ?? "Nova Tarefa"},
                             {"Desc",task.Desc ?? ""},
                             {"Data", task.Data },
                             {"Complete",task.Complete }
