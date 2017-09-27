@@ -82,13 +82,14 @@ namespace notelohell.DAO
             }
             return ret;
         }
-        public TaskUserModel AlterarTask(string email,TaskUserModel task)
+        public TaskUserModel AlterarTask(string email,TaskUserModel task, string nome_old)
         {
             List<TaskUserModel> tasks = BuscarTasks(email);
-            int indice = tasks.FindIndex(0, name => name.Nome == task.Nome);
+            int indice = tasks.FindIndex(0, name => name.Nome == nome_old);
             TaskUserModel ret;
+            //indice = 0;
             var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", task.Nome));
+            var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", nome_old));
             var doc = new BsonDocument
             {{"$set",new BsonDocument{
                 {"Tasks."+indice.ToString()+".Order", task.Order },

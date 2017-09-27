@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using System.Web.Services;
 using notelohell.Models;
 using notelohell.DAO;
+using notelohell.AuthControl;
 
 namespace notelohell.Controllers
 {
     public class TaskUserController : Controller
     {
         // GET: TaskUser
+        [IDRequired]
         public ActionResult TaskUser()
         {
             TaskUserModel t = new TaskUserModel();
@@ -19,17 +21,15 @@ namespace notelohell.Controllers
             ViewBag.Task = tasks;
             return View();
         }
-
+        [IDRequired]
         public JsonResult newTask(TaskUserModel task)
         {
             //TaskUserModel task = (TaskUserModel)json;
             // Session["PlayerName"].ToString()??"";
             task.gravarTask(Session["PlayerName"].ToString());
-            task.Nome = "asdf";
-            ChangeTask(task);
             return Json(new { });
         }
-
+        [IDRequired]
         public JsonResult SearchTask(string nome)
         {
             TaskUserModel t = new TaskUserModel();
@@ -38,13 +38,13 @@ namespace notelohell.Controllers
                 return Json(new { Nome = lt[0].Nome, Desc = lt[0].Desc, Data = lt[0].Data.ToString("dd/MM/yyyy"), Complete=lt[0].Complete });
             return null;
         }
-
-        public JsonResult ChangeTask(TaskUserModel task)
+        [IDRequired]
+        public JsonResult ChangeTask(TaskUserModel task, string nome_old)
         {
-            task.AlterarTask(Session["PlayerName"].ToString());
+            task.AlterarTask(Session["PlayerName"].ToString(),nome_old);
             return Json(new { });
         }
-
+        [IDRequired]
         public JsonResult SeekAndDestroy(string Nome)
         {
             TaskUserModel t = new TaskUserModel();
