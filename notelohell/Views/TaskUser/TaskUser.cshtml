@@ -44,6 +44,7 @@
         <div id="panel-task" class="col-md-12 hide">
             <div class="box-task">
                 <!-- Inserir Nome, desc, comentários, etc... -->
+                <input type="text" id="nameTaskOld" class="hidden" />
                 <div>
                     <div class="col-md-8">
                         <i class="fa fa-2x fa-check stTask"> </i>
@@ -139,6 +140,7 @@
         function LoadTask(data) {
             if (typeof data !== "undefined") {
                 document.getElementById("nameTask").value = data.Nome;
+                document.getElementById("nameTaskOld").value = data.Nome;
                 document.getElementById("descTask").value = data.Desc;
                 document.getElementById("dataTask").value = data.Data;
                 if (data.Complete)
