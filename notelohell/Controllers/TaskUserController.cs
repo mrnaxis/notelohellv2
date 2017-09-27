@@ -25,6 +25,8 @@ namespace notelohell.Controllers
             //TaskUserModel task = (TaskUserModel)json;
             // Session["PlayerName"].ToString()??"";
             task.gravarTask(Session["PlayerName"].ToString());
+            task.Nome = "asdf";
+            ChangeTask(task);
             return Json(new { });
         }
 
@@ -37,8 +39,10 @@ namespace notelohell.Controllers
             return null;
         }
 
-        public JsonResult ChangeTask()
+        public JsonResult ChangeTask(TaskUserModel task)
         {
+
+            task.AlterarTask(Session["PlayerName"].ToString());
             return Json(new { });
         }
     }
