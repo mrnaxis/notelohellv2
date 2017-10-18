@@ -46,8 +46,10 @@ namespace notelohell.Controllers
         [IDRequired]
         public JsonResult SeekAndDestroy(string Nome)
         {
-            TaskUserModel t = new TaskUserModel();
-            t.Nome = Nome;
+            TaskUserModel t = new TaskUserModel
+            {
+                Nome = Nome
+            };
             bool result = t.SeekAndDestroy(Session["PlayerName"].ToString(), t);
             return Json(new { Result = result });
         }

@@ -88,21 +88,35 @@ namespace notelohell.DAO
         public TaskUserModel AlterarTask(string email,TaskUserModel task, string nome_old)
         {
             List<TaskUserModel> tasks = BuscarTasks(email);
-            int indice = tasks.FindIndex(0, name => name.Nome == nome_old);
+            int indice;
+            try
+            {
+                indice = tasks.FindIndex(0, name => name.Nome == nome_old);
+            }
+            catch
+            {
+                throw new Exception();
+            }
+            
             TaskUserModel ret;
-            //indice = 0;
             var builder = Builders<BsonDocument>.Filter;
             var filter = builder.And(builder.Eq("Email", email), builder.Eq("Tasks.Nome", nome_old));
-            var doc = new BsonDocument
-            {{"$set",new BsonDocument{
-                {"Tasks."+indice.ToString()+".Order", task.Order },
-                {"Tasks."+indice.ToString()+".Nome", task.Nome},
-                {"Tasks."+indice.ToString()+".Desc",task.Desc ?? ""},
-                {"Tasks."+indice.ToString()+".Data",task.Data },
-                {"Tasks."+indice.ToString()+".Complete", task.Complete }
-                }
-              }
-            };
+            BsonDocument doc;
+            if (indice >= 0)
+            {
+                doc = new BsonDocument
+                {{"$set",new BsonDocument{
+                    {"Tasks."+indice.ToString()+".Order", task.Order },
+                    {"Tasks."+indice.ToString()+".Nome", task.Nome},
+                    {"Tasks."+indice.ToString()+".Desc",task.Desc ?? ""},
+                    {"Tasks."+indice.ToString()+".Data",task.Data },
+                    {"Tasks."+indice.ToString()+".Complete", task.Complete }
+                    }
+                  }
+                };
+            }
+            else
+                doc = new BsonDocument { } ;
             try
             {
                 var a = BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
