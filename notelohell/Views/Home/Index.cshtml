@@ -15,7 +15,13 @@
         max-width: 750px;
         /*padding-left: 60px;*/
     }
-    .botaotine{
+    .centro-2 {
+        margin: auto;
+        position: center;
+        width: 75%;
+        max-width: 750px;
+    } 
+    .botaotine {
         background-color: #292f36;
         border: none;
         padding: 10px 15px 10px 15px;
@@ -63,6 +69,11 @@
         margin:auto;
         border: none;
     }
+    .ld-dt {
+        margin: auto;
+        width: 5%;
+        max-width: 700px;
+    }
 </style>
 <div class="imgfront">
     <div class="container-fluid">
@@ -80,15 +91,19 @@
     </div>
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div class="divlazuli">
+<div id="loadingData" class="ld-dt hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
+<div id="panelDataGame" class="divlazuli hidden">
     <div class="container-fluid">
         <div class="row">
-            <div class="centro">
-                <p id="dataRec" name="dataReq"></p>
+            <div class="centro-2">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="img-responsive"></div>
+                        <br />
+                        <div class="col-md-3">
+                            <div id="avatar-player" class="img-responsive"></div>
+                            <h4 class="tag-player"></h4>
+                        </div>
+                        <div class="col-md-9">
                             <h2 class="name-player"></h2>
                         </div>
                     </div>
@@ -100,16 +115,18 @@
                         <div class="tab-content">
                             <div id="quick" class="tab-pane active" role="tabpanel">
                                 <h3>Status Gerais</h3>
-                                <ul class="list-group">
-                                    <li class="list-group-item"><span class="txt-black">Stats 1</span></li>
-                                    <li class="list-group-item"><span class="txt-black">Stats 2</span></li>
+                                <ul id="stats-ovl-quick" class="list-group">
                                 </ul>
-                                <div id="chart-time" class="hidden"></div>
+                                <div id="chart-time-quick" class="centro hidden"></div>
+                                <ul id="heroes-list-quick" class="list-group hidden">
+                                </ul>
                             </div>
                             <div id="comp" class="tab-pane" role="tabpanel">
                                 <h3>Status Gerais</h3>
-                                <ul class="list-group">
-                                    <li class="list-group-item"><span class="txt-black">Stats 1</span></li>
+                                <ul id="stats-ovl-comp" class="list-group">
+                                </ul>
+                                <div id="chart-time-comp" class="centro hidden"></div>
+                                <ul id="heroes-list-comp" class="list-group hidden">
                                 </ul>
                             </div>
                         </div>
@@ -125,16 +142,21 @@
     function EnviarDados() {
         var gameTag = document.getElementById("gameTag");
 
-        $("#dataRec").html("Carregando as Paradas... Isso pode demorar um pouquinho...");
+        if (!$("#panelDataGame").hasClass("hidden"))
+            $("#panelDataGame").addClass("hidden");
+
+        if ($("#loadingData").hasClass("hidden"))
+            $("#loadingData").removeClass("hidden");
 
         if (gameTag !== null && gameTag !== 'undefined' && gameTag !== undefined) {
 
+            $("#send").attr("disabled", "disabled");
+
             if (gameTag.value === "") {
                 alert("digite seu battleTag");
-                $("#dataRec").html("");
                 return;
             }
-
+            
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("Teste", "Home")",
@@ -142,51 +164,121 @@
                 contentType: "application/json;",
                 dataType: "json",
                 success: function (data) {
+                    $("#send").removeAttr("disabled");
+                    $("#loadingData").addClass("hidden");
+                    $("#panelDataGame").removeClass("hidden");
                     if (data !== null) {
                         var an = JSON.parse(data);
                         google.charts.load('current', { packages: ['corechart'] });
-                        google.charts.setOnLoadCallback(function () { Graphs(); });
+                        google.charts.setOnLoadCallback(function () { TimeGraphs(); });
                     }
 
-                    function Graphs() {
-                        ConstructTheGraphs(an);
+                    GetAvgStatus(an, 'comp');
+                    GetAvgStatus(an, 'quick');
+
+                    function TimeGraphs() {
+                        ConstructTheTimeGraphs(an, 'comp');
+                        ConstructTheTimeGraphs(an, 'quick');
                     }
                 },
                 error: function () {
-                    alert("Deu Ruim!");
+                    alert("Deu Ruim! Tente Novamente!");
+                    $("#send").removeAttr("disabled");
+                    $("#loadingData").addClass("hidden");
                 }
             });
+            
         }
     }
     $(document).ready(function () {
         $("#send").click(EnviarDados);
     });
-    function ConstructTheGraphs(d) {
+
+    function GetAvgStatus(d, typeCons) {
+        //pega o status básicos do jogador, sendo eles apenas dados individuais.
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string')
+            return null;
+
+        var lin = d.us.stats;
+        if (typeof lin !== 'undefined') {
+
+            var reqName = d._request.route;
+            $(".tag-player").html("<i>" + reqName.split('/')[4].replace('-','#')+"</i>");
+            $(".name-player").html("" + reqName.split('/')[4].split('-')[0]);
+
+            if (typeCons === 'comp') {
+                var lincompov = lin.competitive.overall_stats;
+                var lincompgs = lin.competitive.game_stats;
+                $("#avatar-player").html("<img class='img-rounded' src='" + lincompov['avatar'] + "' alt='PlayerChar'/>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
+                    lincompov['wins']
+                    + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
+                    lincompgs['medals']
+                    + "</span></li>");
+            }
+            else if (typeCons === 'quick')
+            {
+                var linquickov = lin.quickplay.overall_stats;
+                var linquickgs = lin.quickplay.game_stats;
+                $("#avatar-player").html("<img class='img-rounded' src='" + linquickov['avatar'] + "' alt='PlayerChar'/>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
+                    linquickov['wins']
+                    + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
+                    linquickgs['medals']
+                    + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD: " +
+                    linquickgs['kpd']
+                    + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Horas de Jogo: " +
+                    linquickgs['time_played']
+                    + "</span></li>");
+            }
+        }
+    }
+
+    function ConstructTheTimeGraphs(d, typeCons, gpLocalId) {
         //copiei na cara dura msm, e vou adaptar
-        // Create the data table.
+        //Create the data table.
+        if ((typeof d !== 'string' || typeof d !== 'object')
+            && typeof typeCons !== 'string') {
+            return null;
+        }
+
+        if (typeof gpLocalId !== 'string')
+            gpLocalId = 'chart-time-' + typeCons;
        
         var dt = [['Heroes', 'Time']];
-        var lin = d.us.heroes.playtime.quickplay;
+        var lin;
+
+        if (typeCons === 'quick')
+            lin = d.us.heroes.playtime.quickplay;
+        else
+            lin = d.us.heroes.playtime.competitive;
+
         if (typeof lin !== 'undefined') {
             for (var i in lin) {
                 if (lin.hasOwnProperty(i)) {
-                    dt.push([i,lin[i]]);
+                    if (Number(lin[i]) > 0)
+                        dt.push([i, lin[i]]);
                 }
             }
+
+            var data = new google.visualization.arrayToDataTable(dt);
+
+            // Set chart options
+            var options = {
+                'title': 'How Much Time Did I Waste?',
+                'width': 500,
+                'height': 450
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.BarChart(document.getElementById(gpLocalId));
+            chart.draw(data, options);
+
+            $("#" + gpLocalId).removeClass("hidden");
         }
-        var data = new google.visualization.arrayToDataTable(dt);
-
-        // Set chart options
-        var options = {
-            'title': 'How Much Time Did I Waste?',
-            'width': 500,
-            'height': 500
-        };
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.BarChart(document.getElementById('chart-time'));
-        chart.draw(data, options);
-
-        $("#chart-time").removeClass("hidden");
     }
 </script>
