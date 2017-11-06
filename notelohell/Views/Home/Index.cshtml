@@ -40,6 +40,10 @@
         width: 70%;
         color: #000000;
     }
+
+    .txt-black{
+        color:#000000;
+    }
     /*.textin::-webkit-input-placeholder{
         color: #eaeaea;
     }
@@ -64,10 +68,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="centro">
-                <div class="form-inline form-group" ">
-                    <label for="gameTag"></label>
-                    <input type="text" id="gameTag" name="gameTag" class="textin" placeholder="BattleTag" />
-                    <input type="button" id="send" name="send" class="botaotine" value="Buscar" />
+                <div class="form-inline form-group">
+                    <div class="text-center">
+                        <label for="gameTag"></label>
+                        <input type="text" id="gameTag" name="gameTag" class="textin" placeholder="BattleTag" />
+                        <input type="button" id="send" name="send" class="botaotine" value="Buscar" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,7 +85,36 @@
         <div class="row">
             <div class="centro">
                 <p id="dataRec" name="dataReq"></p>
-                <div id="chart-time" class="hidden"></div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="img-responsive"></div>
+                            <h2 class="name-player"></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#quick" aria-controls="quick" role="tab" data-toggle="tab">Quickplay</a></li>
+                            <li role="presentation"><a href="#comp" aria-controls="comp" role="tab" data-toggle="tab">Competitivo</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="quick" class="tab-pane active" role="tabpanel">
+                                <h3>Status Gerais</h3>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><span class="txt-black">Stats 1</span></li>
+                                    <li class="list-group-item"><span class="txt-black">Stats 2</span></li>
+                                </ul>
+                                <div id="chart-time" class="hidden"></div>
+                            </div>
+                            <div id="comp" class="tab-pane" role="tabpanel">
+                                <h3>Status Gerais</h3>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><span class="txt-black">Stats 1</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -145,7 +180,7 @@
         var options = {
             'title': 'How Much Time Did I Waste?',
             'width': 500,
-            'height': 600
+            'height': 500
         };
 
         // Instantiate and draw our chart, passing in some options.
