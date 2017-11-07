@@ -99,11 +99,11 @@
                 <div class="container-fluid">
                     <div class="row">
                         <br />
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-lg-3">
                             <div id="avatar-player" class="img-responsive"></div>
                             <h4 class="tag-player"></h4>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-9 col-lg-9">
                             <h2 class="name-player"></h2>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                                 <ul id="stats-ovl-quick" class="list-group">
                                 </ul>
                                 <div id="chart-time-quick" class="centro hidden"></div>
-                                <ul id="heroes-list-quick" class="list-group hidden">
+                                <ul id="heroes-list-quick" class="list-group">
                                 </ul>
                             </div>
                             <div id="comp" class="tab-pane" role="tabpanel">
@@ -126,7 +126,7 @@
                                 <ul id="stats-ovl-comp" class="list-group">
                                 </ul>
                                 <div id="chart-time-comp" class="centro hidden"></div>
-                                <ul id="heroes-list-comp" class="list-group hidden">
+                                <ul id="heroes-list-comp" class="list-group">
                                 </ul>
                             </div>
                         </div>
@@ -175,6 +175,8 @@
 
                     GetAvgStatus(an, 'comp');
                     GetAvgStatus(an, 'quick');
+                    GetHeroesNStats(an, 'quick');
+                    GetHeroesNStats(an, 'comp');
 
                     function TimeGraphs() {
                         ConstructTheTimeGraphs(an, 'comp');
@@ -216,6 +218,9 @@
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
                     lincompgs['medals']
                     + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Horas de Jogo: " +
+                    lincompgs['time_played']
+                    + "</span></li>");
             }
             else if (typeCons === 'quick')
             {
@@ -225,7 +230,7 @@
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
                     linquickov['wins']
                     + "</span></li>");
-                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b): " +
                     linquickgs['medals']
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD: " +
@@ -235,6 +240,23 @@
                     linquickgs['time_played']
                     + "</span></li>");
             }
+        }
+    }
+
+    function GetHeroesNStats(d, typeCons) {
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string')
+            return null;
+
+        var linheroes = d.us.heroes;
+        var linquick = linheroes.stats.quickplay;
+
+        for (var i in linquick) {
+            if (linquick.hasOwnProperty(i)) {
+                $("#heroes-list-" + typeCons).append("<li class='list-group-item'><span class='txt-black'><a href='#'>" +
+                    i
+                    +"</a></span></li>")
+            }
+
         }
     }
 
