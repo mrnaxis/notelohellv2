@@ -19,7 +19,6 @@
         margin: auto;
         position: center;
         width: 75%;
-        max-width: 750px;
     } 
     .botaotine {
         background-color: #292f36;
@@ -56,6 +55,17 @@
     .textin::-moz-placeholder{
         color: #eaeaea;
     }*/
+
+    .panel-heroes {
+        border-radius: 5px;
+        background-color: #f4fff7;
+    }
+
+    .heroes-item {
+        width: 15%;
+        margin: 4px 4px 4px 4px;
+    }
+
     .imgfront {
         /*background-image: url('../../img/OW_Anniversary_023.jpg');*/
         width: 100%;
@@ -93,45 +103,64 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div id="loadingData" class="ld-dt hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
 <div id="panelDataGame" class="divlazuli hidden">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="centro-2">
-                <div class="container-fluid">
-                    <div class="row">
-                        <br />
-                        <div class="col-md-3 col-lg-3">
-                            <div id="avatar-player" class="img-responsive"></div>
-                            <h4 class="tag-player"></h4>
-                        </div>
-                        <div class="col-md-9 col-lg-9">
-                            <h2 class="name-player"></h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#quick" aria-controls="quick" role="tab" data-toggle="tab">Quickplay</a></li>
-                            <li role="presentation"><a href="#comp" aria-controls="comp" role="tab" data-toggle="tab">Competitivo</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div id="quick" class="tab-pane active" role="tabpanel">
-                                <h3>Status Gerais</h3>
-                                <ul id="stats-ovl-quick" class="list-group">
-                                </ul>
-                                <div id="chart-time-quick" class="centro hidden"></div>
-                                <ul id="heroes-list-quick" class="list-group">
-                                </ul>
-                            </div>
-                            <div id="comp" class="tab-pane" role="tabpanel">
-                                <h3>Status Gerais</h3>
-                                <ul id="stats-ovl-comp" class="list-group">
-                                </ul>
-                                <div id="chart-time-comp" class="centro hidden"></div>
-                                <ul id="heroes-list-comp" class="list-group">
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+    <div class="centro-2">
+        <div class="container-fluid">
+            <div class="row">
+                <br />
+                <div class="col-md-1 col-lg-1" style="padding-right: 10em;">
+                    <div id="avatar-player" class="img-responsive"></div>
+                    <h4 class="tag-player"></h4>
                 </div>
+                <div class="col-md-10 col-lg-10">
+                    <h2 class="name-player"></h2>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#quick" aria-controls="quick" role="tab" data-toggle="tab">Quickplay</a></li>
+                    <li role="presentation"><a href="#comp" aria-controls="comp" role="tab" data-toggle="tab">Competitivo</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="quick" class="tab-pane active" role="tabpanel">
+                        <h3>Status Gerais</h3>
+                        <div class="col-md-6">
+                            <ul id="stats-ovl-quick" class="list-group"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="chart-time-quick" class=" centro 
+                                 hidden"></div>
+                        </div>
+                        <br />
+                        <div class="col-md-6 panel-heroes">
+                            <div id="heroes-list-quick" class="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="heroes-info-quick" class="">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="comp" class="tab-pane" role="tabpanel">
+                        <h3>Status Gerais</h3>
+                        <div class="col-md-6">
+                            <ul id="stats-ovl-comp" class="list-group"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="chart-time-comp" class="centro hidden"></div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-md-6 panel-heroes">
+                            <div id="heroes-list-comp" class="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="heroes-info-comp">
+                            </div>
+                        </div>
+                   </div>
+                </div>
+                <br />
             </div>
         </div>
     </div>
@@ -243,20 +272,40 @@
         }
     }
 
+    function ChangePanel(idName, dadElement) {
+        if (typeof idName !== "string" || typeof dadElement !== "string")
+            return null;
+
+        var c = $("#" + dadElement).children();
+        c.addClass("hidden");
+        var nextChanged = c.closest("."+idName);
+        nextChanged.removeClass("hidden");
+    }
+
     function GetHeroesNStats(d, typeCons) {
         if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string')
             return null;
 
         var linheroes = d.us.heroes;
-        var linquick = linheroes.stats.quickplay;
+        var linquick = typeCons === "quick" ? linheroes.stats.quickplay : linheroes.stats.competitive;
 
         for (var i in linquick) {
             if (linquick.hasOwnProperty(i)) {
-                $("#heroes-list-" + typeCons).append("<li class='list-group-item'><span class='txt-black'><a href='#'>" +
-                    i
-                    +"</a></span></li>")
+                var fns = "ChangePanel('" + i.trim() + "-" + typeCons + "', 'heroes-info-" + typeCons + "'); event.preventDefault();";
+                $("#heroes-list-" + typeCons).append("<div class='col-md-1 heroes-item'><span class='txt-black'><a id='" + i + "-" + typeCons
+                    + "' href='#' onclick=\""+fns+"\"> " + i + "</a></span></div>");
+                //$("#" + i).on("click", function () { ChangePanel(i, "heroes-info-" + typeCons) });
             }
-
+        }
+        
+        for (var i in linquick) {
+            if (linquick.hasOwnProperty(i)) {
+                $("#heroes-info-" + typeCons).append("<ul class='list-group " + i + '-' + typeCons + " hidden'></ul>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + linquick[i].general_stats.all_damage_done + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + linquick[i].general_stats.eliminations + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Mortes : " + linquick[i].general_stats.deaths + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b) : " + linquick[i].general_stats.medals + "</span></li>");
+            }
         }
     }
 
