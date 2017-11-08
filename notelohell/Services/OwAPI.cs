@@ -22,7 +22,11 @@ namespace notelohell.Services
                 data = wc.DownloadString(url);
             }
             if(usuario != null)
-                SalvarDados(data,usuario);
+            {
+                if(usuario.GameTag.Replace("#","-") == tag)
+                SalvarDados(data, usuario);
+            }
+               
             return data;
         }
 
