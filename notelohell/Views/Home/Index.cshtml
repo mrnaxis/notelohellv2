@@ -127,17 +127,27 @@
                             <ul id="stats-ovl-quick" class="list-group"></ul>
                         </div>
                         <div class="col-md-6">
-                            <div id="chart-time-quick" class=" centro 
-                                 hidden"></div>
+                            <div id="chart-time-quick" class="hidden"></div>
                         </div>
                         <br />
-                        <div class="col-md-6 panel-heroes">
-                            <div id="heroes-list-quick" class="">
+                        <br />
+                        <div class="col-md-12">
+                            <div class="col-md-6 panel-heroes">
+                                <div id="heroes-list-quick" class="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="heroes-info-quick" class="">
+                                </div>
                             </div>
                         </div>
+                        <br />
+                        <br />
                         <div class="col-md-6">
-                            <div id="heroes-info-quick" class="">
-                            </div>
+                            <div id="chart-damage-quick"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="chart-kills-quick"></div>
                         </div>
                     </div>
                     <div id="comp" class="tab-pane" role="tabpanel">
@@ -146,17 +156,27 @@
                             <ul id="stats-ovl-comp" class="list-group"></ul>
                         </div>
                         <div class="col-md-6">
-                            <div id="chart-time-comp" class="centro hidden"></div>
+                            <div id="chart-time-comp" class="hidden"></div>
                         </div>
                         <br />
                         <br />
-                        <div class="col-md-6 panel-heroes">
-                            <div id="heroes-list-comp" class="">
+                        <div class="col-md-12">
+                            <div class="col-md-6 panel-heroes">
+                                <div id="heroes-list-comp" class="">
+                                </div>
                             </div>
+                            <div class="col-md-6">
+                                <div id="heroes-info-comp">
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-md-6">
+                            <div id="chart-damage-comp"></div>
                         </div>
                         <div class="col-md-6">
-                            <div id="heroes-info-comp">
-                            </div>
+                            <div id="chart-kills-comp"></div>
                         </div>
                    </div>
                 </div>
@@ -199,7 +219,7 @@
                     if (data !== null) {
                         var an = JSON.parse(data);
                         google.charts.load('current', { packages: ['corechart'] });
-                        google.charts.setOnLoadCallback(function () { TimeGraphs(); });
+                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral();});
                     }
 
                     GetAvgStatus(an, 'comp');
@@ -210,6 +230,13 @@
                     function TimeGraphs() {
                         ConstructTheTimeGraphs(an, 'comp');
                         ConstructTheTimeGraphs(an, 'quick');
+                    }
+
+                    function GraphsGeneral() {
+                        ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-damage-quick', 'Damage', 'all_damage_done');
+                        ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-damage-comp', 'Damage', 'all_damage_done');
+                        ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-kills-quick', 'Kills', 'eliminations');
+                        ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-kills-comp', 'Kills', 'eliminations');
                     }
                 },
                 error: function () {
@@ -303,10 +330,54 @@
                 $("#heroes-info-" + typeCons).append("<ul class='list-group " + i + '-' + typeCons + " hidden'></ul>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + linquick[i].general_stats.all_damage_done + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + linquick[i].general_stats.eliminations + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações Solo: " + linquick[i].general_stats.solo_kills + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Mortes : " + linquick[i].general_stats.deaths + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b) : " + linquick[i].general_stats.medals + "</span></li>");
             }
         }
+    }
+
+    function ConstructTheGeneralStatsGraphs(d, typeCons, gpLocalId, field, idfield) {
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string') {
+            return null;
+        }
+
+        if (typeof gpLocalId !== 'string')
+            gpLocalId = 'chart-time-' + typeCons;
+
+        var dt = [['Heroes',field]];
+        var lin;
+
+        if (typeCons === 'quick')
+            lin = d.us.heroes.stats.quickplay;
+        else
+            lin = d.us.heroes.stats.competitive;
+
+        if (typeof lin !== 'undefined') {
+            for (var i in lin) {
+                if (lin.hasOwnProperty(i)) {
+                    var h = lin[i];
+                    //if (Number(h.general_stats[idfield]) > 0)
+                        dt.push([i, h.general_stats[idfield]]);
+                }
+            }
+
+            var data = new google.visualization.arrayToDataTable(dt);
+
+            // Set chart options
+            var options = {
+                'title': field,
+                'width': 500,
+                'height': 500
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById(gpLocalId));
+            chart.draw(data, options);
+
+            $("#" + gpLocalId).removeClass("hidden");
+        }
+
     }
 
     function ConstructTheTimeGraphs(d, typeCons, gpLocalId) {
