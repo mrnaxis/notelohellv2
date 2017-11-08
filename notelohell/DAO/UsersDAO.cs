@@ -93,5 +93,21 @@ namespace notelohell.DAO
 
             return BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
         }
+        public UsersModel SakvarDados(UsersModel user, string dados)
+        {
+
+            var builder = Builders<UsersModel>.Filter;
+            FilterDefinition<UsersModel> filter;
+            filter = builder.Eq("Email", user.Email);
+            var data = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(dados);
+            var doc = new BsonDocument
+            {{"$set",new BsonDocument{
+                {"DadosOverWatch", data}
+                }
+              }
+            };
+
+            return BsonSerializer.Deserialize<UsersModel>(conf.Alterar(filter, collection, doc));
+        }
     }
 }

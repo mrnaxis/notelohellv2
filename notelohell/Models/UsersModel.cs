@@ -28,6 +28,7 @@ namespace notelohell.Models
         [Required]
         public bool Ativo { get; set; }
         public List<TaskUserModel> Tasks = new List<TaskUserModel>();
+        public BsonDocument DadosOverWatch { get; set; }
 
         public UsersModel() { }
 
@@ -80,6 +81,11 @@ namespace notelohell.Models
                 && (user.Id.Equals(this.Id))))
                 return false;
             return true;
+        }
+        public void SalvarDados(string dados)
+        {
+            UsersDAO dao = new UsersDAO();
+            dao.SakvarDados(this,dados);
         }
     }
 }

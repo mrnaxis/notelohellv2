@@ -5,6 +5,8 @@ using System.Net;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using notelohell.Services;
+using notelohell.Models;
 
 
 namespace notelohell.Controllers
@@ -38,17 +40,12 @@ namespace notelohell.Controllers
             if (tag.IndexOf("#") > 0)
                 tag = tag.Replace("#","-");
 
+            UsersModel user = (UsersModel)Session["Player"];//necessário reformular, tem que ver se o usuário é cadastrado primeiro
             string data = string.Empty;
+            OwAPI api = new OwAPI();
             try
             {
-                using (WebClient wc = new WebClient())
-                {
-                    wc.Headers.Add("Accept-Language", " en-US");
-                    wc.Headers.Add("Accept", " text/html, application/xhtml+xml, */*");
-                    wc.Headers.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
-                    string url = "http://owapi.net/api/v3/u/" + tag + "/blob";
-                    data = wc.DownloadString(url);
-                }
+                data = api.Buscar(tag,user);
             }
             catch
             {
