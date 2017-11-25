@@ -50,11 +50,12 @@ namespace notelohell.DAO
             filter = builder.Eq("Email", email);
 
             List<TaskUserModel> checkPrev = BuscarTasks(email, task.Nome);
+            List<TaskUserModel> checkAll = BuscarTasks(email);
 
-            if (checkPrev != null)
+            if (checkPrev != null && checkAll != null)
             {
                 if (checkPrev.Count > 0)
-                    task.Nome = task.Nome + task.GetHashCode();
+                    task.Nome = task.Nome + (checkAll.Count + 1).ToString();
             }
 
             var doc = new BsonDocument

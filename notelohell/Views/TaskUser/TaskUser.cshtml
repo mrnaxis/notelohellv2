@@ -6,16 +6,26 @@
 
     } 
     .list-view li {
-        border: 1px solid black;
+        border: 3px solid black;
+        border-radius: 18px;
+        background-color: #fcffff;
         padding: 15px;
+        margin: 10px;
         text-decoration: none;
         list-style: none;
     }
     #panel-task{
         margin: 5px;
     }
+    .task-fixed{
+        position: absolute;
+        padding-top: 6px;
+        padding-left: 15px;
+    }
     .box-task {
-        border: 1px solid black;
+        border: 3px solid black;
+        border-radius: 18px;
+        background-color: #fcffff;
         padding: 15px;
         margin-left: 35px;
     }
@@ -46,15 +56,15 @@
             <div class="box-task">
                 <!-- Inserir Nome, desc, comentários, etc... -->
                 <input type="text" id="nameTaskOld" class="hidden" />
-                <div>
-                    <div class="col-md-8">
-                        <i class="fa fa-2x fa-check stTask"> </i>
-                    </div>
-                    <div class="col-md-4 form-inline">
-                        <label for="dataTask">Até:</label> <input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
-                        <i class="fa fa-2x fa-trash" aria-hidden="true"></i>
-                    </div>
+                <div class="col-md-8">
+                    <i class="fa fa-2x fa-check stTask"> </i>
                 </div>
+                <div class="col-md-4 form-inline">
+                    <label for="dataTask">Até:&nbsp;</label><input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
+                    <i class="fa fa-2x fa-trash" style="position:absolute; padding-top:2px; padding-left: 30px;" aria-hidden="true"></i>
+                </div>
+                <br />
+                <br />
                 <input type="text" id="nameTask" class="form-control" value="Nova Tarefa" />
                 <br />
                 <textarea class="form-control" id="descTask" placeholder="Descrição..."></textarea>
@@ -68,8 +78,8 @@
 
             $("#addTk").on("click", function () {
                 $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> Nova Tarefa<e/></li>");
-                SaveData({ Order: $(".list-view").find("li").length - 1 }, RetNome());
-                $(".task-fixed").click();
+                SaveData({ Order: $(".list-view").find("li").length - 1 });
+                FinalCall();
             });
 
             $("#dataTask").on("blur", function (event) {
@@ -99,22 +109,38 @@
                     SeekAndDestroy(document.getElementById("nameTask").value);
             });
 
+            FinalCall();
+        });
+
+        function FinalCall(name) {
             $(".task-fixed").on("click", function (event) {
                 var panelTask = $("#panel-task");
                 var e = event;
                 if (!panelTask.hasClass("hide"))
                     panelTask.addClass("hide");
                 //exibir dados
-                GetData(e.currentTarget.textContent.trim());
+                var targetName = e.currentTarget.textContent.trim();
+                if (typeof name !== 'null' && typeof name !== 'undefined')
+                    targetName = name;
+                GetData(targetName);
                 panelTask.removeClass("hide");
             });
-        });
-                
+
+            if (typeof name !== 'null' && typeof name !== 'undefined')
+                $(".task-fixed").click();
+
+        }
+
         function LoaderIndicator() {
             return null;
         }
 
         function ObjMakerTask(nameTask, status, modAll, backtome) {
+
+            if (typeof nameTask === 'undefined' || nameTask === "") {
+                return;
+            }
+
             var objftw = {
                 "Nome": nameTask,
                 "Complete": status,
@@ -170,14 +196,21 @@
             });
         }
 
-        function SaveData(tasksUser, backtome) {
+        function SaveData(tasksUser) {
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("newTask", "TaskUser")",
                 data: JSON.stringify(tasksUser),
                 contentType: "application/json",
                 dataType: "json",
-                success: function (data) { backtome(data.Nome) },
+                success: function (data)
+                {
+                    if (typeof data.Nome !== "null" && typeof data.Nome !== "undefined") {
+                        $(".newLife").html(data.Nome);
+                    }
+                    $(".newLife").removeClass("newLife");
+                    FinalCall(data.Nome);
+                },
                 error: null
             });
         }

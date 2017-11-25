@@ -25,8 +25,8 @@ namespace notelohell.Controllers
         public JsonResult newTask(TaskUserModel task)
         {
             task.Nome = "Nova Tarefa";
-            task.gravarTask(Session["PlayerName"].ToString());
-            return Json(new { });
+            string nome = task.gravarTask(Session["PlayerName"].ToString());
+            return Json(new { Nome = nome });
         }
         [IDRequired]
         public JsonResult SearchTask(string nome)
@@ -34,7 +34,14 @@ namespace notelohell.Controllers
             TaskUserModel t = new TaskUserModel();
             List<TaskUserModel> lt = t.BuscarTasks(Session["PlayerName"].ToString(), nome);
             if (lt.Count == 1)
-                return Json(new { Nome = lt[0].Nome, Desc = lt[0].Desc, Data = lt[0].Data.ToString("dd/MM/yyyy"), Complete=lt[0].Complete });
+            {
+                string DataTask = string.Empty;
+                if (lt[0].Data != DateTime.MinValue)
+                    DataTask = lt[0].Data.ToString("dd/MM/yyyy");
+                else
+                    DataTask = "";
+                return Json(new { Nome = lt[0].Nome, Desc = lt[0].Desc, Data = DataTask, Complete = lt[0].Complete });
+            }
             return null;
         }
         [IDRequired]
