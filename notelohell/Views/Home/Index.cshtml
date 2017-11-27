@@ -242,7 +242,7 @@
                 error: function () {
                     alert("Deu Ruim! Tente Novamente!");
                     $("#send").removeAttr("disabled");
-                    $("#loadingData").addClass("hidden");
+                    $("#loadingData").addClass("hsidden");
                 }
             });
             
@@ -251,6 +251,12 @@
     $(document).ready(function () {
         $("#send").click(EnviarDados);
     });
+
+    function CKST(fieldToBeChecked) {
+        if (typeof fieldToBeChecked === 'undefined' || typeof fieldToBeChecked === 'null')
+            return "0";
+        return fieldToBeChecked;
+    }
 
     function GetAvgStatus(d, typeCons) {
         //pega o status básicos do jogador, sendo eles apenas dados individuais.
@@ -269,13 +275,13 @@
                 var lincompgs = lin.competitive.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + lincompov['avatar'] + "' alt='PlayerChar'/>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
-                    lincompov['wins']
+                    CKST(lincompov['wins'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
-                    lincompgs['medals']
+                    CKST(lincompgs['medals'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Horas de Jogo: " +
-                    lincompgs['time_played']
+                    CKST(lincompgs['time_played'])
                     + "</span></li>");
             }
             else if (typeCons === 'quick')
@@ -284,16 +290,16 @@
                 var linquickgs = lin.quickplay.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + linquickov['avatar'] + "' alt='PlayerChar'/>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
-                    linquickov['wins']
+                    CKST(linquickov['wins'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b): " +
-                    linquickgs['medals']
+                    CKST(linquickgs['medals'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD: " +
-                    linquickgs['kpd']
+                    CKST(linquickgs['kpd'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Horas de Jogo: " +
-                    linquickgs['time_played']
+                    CKST(linquickgs['time_played'])
                     + "</span></li>");
             }
         }
@@ -328,11 +334,11 @@
         for (var i in linquick) {
             if (linquick.hasOwnProperty(i)) {
                 $("#heroes-info-" + typeCons).append("<ul class='list-group " + i + '-' + typeCons + " hidden'></ul>");
-                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + linquick[i].general_stats.all_damage_done + "</span></li>");
-                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + linquick[i].general_stats.eliminations + "</span></li>");
-                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações Solo: " + linquick[i].general_stats.solo_kills + "</span></li>");
-                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Mortes : " + linquick[i].general_stats.deaths + "</span></li>");
-                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b) : " + linquick[i].general_stats.medals + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + CKST(linquick[i].general_stats.all_damage_done) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + CKST(linquick[i].general_stats.eliminations) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações Solo: " + CKST(linquick[i].general_stats.solo_kills) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Mortes : " + CKST(linquick[i].general_stats.deaths) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b) : " + CKST(linquick[i].general_stats.medals) + "</span></li>");
             }
         }
     }
@@ -372,7 +378,7 @@
             };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById(gpLocalId));
+            var chart = new google.visualization.BarChart(document.getElementById(gpLocalId));
             chart.draw(data, options);
 
             $("#" + gpLocalId).removeClass("hidden");

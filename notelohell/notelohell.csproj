@@ -182,6 +182,7 @@
     <Compile Include="AuthControl\IDRequired.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StatsUserController.cs" />
     <Compile Include="Controllers\TaskUserController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAO\TaskUserDAO.cs" />
@@ -270,6 +271,7 @@
     <Content Include="Views\Users\ChangeUser.cshtml" />
     <Content Include="Views\Users\ChangePass.cshtml" />
     <Content Include="Views\TaskUser\TaskUser.cshtml" />
+    <Content Include="Views\StatsUser\StatsUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
