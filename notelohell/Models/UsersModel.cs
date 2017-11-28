@@ -7,6 +7,7 @@ using notelohell.DAO;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
+using notelohell.Services;
 
 namespace notelohell.Models
 {
@@ -34,6 +35,12 @@ namespace notelohell.Models
 
         public bool GravarUsuario()
         {
+            OwAPI api = new OwAPI();
+            string data = string.Empty;
+            
+            data = api.SoBusca(this.GameTag);
+            this.DadosOverWatch = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(data);
+
             UsersDAO dao = new UsersDAO();
             UsersModel usercheck = dao.BuscarUsuario(Email, null);
             if (usercheck == null)
