@@ -37,9 +37,6 @@ namespace notelohell.Controllers
             if (string.IsNullOrEmpty(tag))
                 return Json(new object { });
 
-            if (tag.IndexOf("#") > 0)
-                tag = tag.Replace("#","-");
-
             UsersModel user = (UsersModel)Session["Player"];//necessário reformular, tem que ver se o usuário é cadastrado primeiro
             string data = string.Empty;
             OwAPI api = new OwAPI();

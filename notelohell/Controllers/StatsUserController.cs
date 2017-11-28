@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using notelohell.Models;
+using notelohell.AuthControl;
 
 namespace notelohell.Controllers
 {
@@ -12,6 +14,18 @@ namespace notelohell.Controllers
         public ActionResult StatsUser()
         {
             return View();
+        }
+
+
+        /// <summary>
+        /// Busca dados do usuário logado
+        /// </summary>
+        [IDRequired]
+        public JsonResult BuscarDadosJogos()
+        {
+            UsersModel user = (UsersModel)Session["Player"];
+            user = user.BuscarUsuario();
+            return Json(user.DadosOverWatch);
         }
     }
 }
