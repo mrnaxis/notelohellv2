@@ -15,7 +15,7 @@ namespace notelohell.Controllers
     {
         public ActionResult Index()
         {
-            Gambi();
+            //Gambi();
             return View();
         }
 
