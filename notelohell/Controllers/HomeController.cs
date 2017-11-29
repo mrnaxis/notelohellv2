@@ -15,10 +15,8 @@ namespace notelohell.Controllers
     {
         public ActionResult Index()
         {
-            OwStats stats = new OwStats();
-            var teste = stats.DadosOverWatch();//gambipt2
-
             //Gambi();
+           
             return View();
         }
 

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using notelohell.Models;
 using notelohell.AuthControl;
+using notelohell.Utils;
 
 namespace notelohell.Controllers
 {
@@ -27,6 +28,17 @@ namespace notelohell.Controllers
             return Json(user.DadosOverWatch.ToString());
         }
 
+        public double MediaGeral()
+        {
+            OwStats stats = new OwStats();
+            return stats.CalcularVitoriasGeral();
+        }
+        public double Media()
+        {
+            OwStats stats = new OwStats();
+            UsersModel user = (UsersModel)Session["Player"];
+            return stats.CalcularVitorias(user.DadosOverWatch);
+        }
         public JsonResult BuscarTasksGeral()
         {
             TaskUserModel t = new TaskUserModel();
