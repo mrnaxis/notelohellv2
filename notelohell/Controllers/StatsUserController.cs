@@ -17,16 +17,14 @@ namespace notelohell.Controllers
             return View();
         }
 
-
         /// <summary>
         /// Busca dados do usuário logado
         /// </summary>
-        [IDRequired]
         public JsonResult BuscarDadosJogos()
         {
             UsersModel user = (UsersModel)Session["Player"];
             user = user.BuscarUsuario();
-            return Json(user.DadosOverWatch);
+            return Json(user.DadosOverWatch.ToString());
         }
     }
 }

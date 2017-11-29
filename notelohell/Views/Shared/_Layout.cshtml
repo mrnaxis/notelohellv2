@@ -13,8 +13,15 @@
 </head>
 <body>
     <style type="text/css">
+        html {
+            margin:0;
+            height: 95%;
+        }
         body{
             background-color:#f7fff7;
+            height: 100%;
+            margin: 0;
+            overflow-x: hidden;
         }
         .supernav{
             display: inline-block;
@@ -77,9 +84,24 @@
         .botaotine:hover{
             background-color: #001E35;
         }
+        .page-wrap {
+            min-height: 100%;
+            /* equal to footer height */
+            margin-bottom: -45px;
+        }
+
+        .page-wrap:after {
+            content: "";
+            display: block;
+        }
+
+        .site-footer, .page-wrap:after {
+            height: 45px;
+        }
+
     </style>
     <div class="supernav">
-        <ul class="logo left"><li>@Html.ActionLink("LogoAqui", "Index", "Home")</li></ul>
+        <ul class="logo left"><li>@Html.ActionLink("!EloHell", "Index", "Home")</li></ul>
         <ul class="dir">
         @if (Session["Player"] == null)
         {
@@ -88,6 +110,7 @@
         }
         else
         {
+            <li>@Html.ActionLink("Estatísticas", "StatsUser", "StatsUser")</li>
             <li>@Html.ActionLink("Minhas Tarefas", "TaskUser", "TaskUser")</li>
             <li>@Html.ActionLink(Session["PlayerName"].ToString() ?? "Sign in", "BeholderUser", "Auth")</li>
             <li>@Html.ActionLink("Sign out", "LogOff", "Auth")</li>
@@ -95,17 +118,19 @@
         </ul>
     </div>
     <style type="text/css">
-        .footer-conf{
-            background-color:#011627;
-            position:absolute;
+        .footer-conf {
+            background-color: #011627;
+            /*position:absolute;*/
             color: #eaeaea;
-            width: 100%;
+            /*width: 100%;*/
         }
     </style>
     <!--<div class="container body-content">-->
+    <div class="page-wrap">
         @RenderBody()
+    </div>
     <script type="text/javascript" src="~/Scripts/General/Verifications.js?1"></script>
-    <div class="footer-conf">
+    <div class="footer-conf site-footer">
         <footer class="container">
             <p>@DateTime.Now.Year - Made With &hearts; by Us.</p>
         </footer>

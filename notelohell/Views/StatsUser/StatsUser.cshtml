@@ -3,10 +3,8 @@
     ViewBag.Title = "StatsUser";
 }
 
-<h2>StatsUser</h2>
-
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div id="loadingData" class="ld-dt hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
+<div id="loadingData" class="ld-dt centro hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
 <div id="panelDataGame" class="divlazuli hidden">
     <div class="centro-2">
         <div class="container-fluid">
@@ -94,7 +92,6 @@
 
 <script>
     function EnviarDados() {
-        var gameTag = document.getElementById("gameTag");
 
         if (!$("#panelDataGame").hasClass("hidden"))
             $("#panelDataGame").addClass("hidden");
@@ -102,19 +99,10 @@
         if ($("#loadingData").hasClass("hidden"))
             $("#loadingData").removeClass("hidden");
 
-        if (gameTag !== null && gameTag !== 'undefined' && gameTag !== undefined) {
-
-            $("#send").attr("disabled", "disabled");
-
-            if (gameTag.value === "") {
-                alert("digite seu battleTag");
-                return;
-            }
-
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("Teste", "Home")",
-                data: JSON.stringify({ tag: gameTag.value }),
+                url: "@Url.Action("BuscarDadosJogos", "StatsUser")",
+                data: "",
                 contentType: "application/json;",
                 dataType: "json",
                 success: function (data) {
@@ -147,14 +135,13 @@
                 error: function () {
                     alert("Deu Ruim! Tente Novamente!");
                     $("#send").removeAttr("disabled");
-                    $("#loadingData").addClass("hsidden");
+                    $("#loadingData").addClass("hidden");
                 }
             });
 
         }
-    }
     $(document).ready(function () {
-        $("#send").click(EnviarDados);
+        EnviarDados();
     });
 
     function CKST(fieldToBeChecked) {
@@ -278,7 +265,7 @@
             // Set chart options
             var options = {
                 'title': field,
-                'width': 500,
+                'width': 580,
                 'height': 500
             };
 
