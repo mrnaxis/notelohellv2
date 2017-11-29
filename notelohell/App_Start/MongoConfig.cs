@@ -12,10 +12,7 @@ namespace notelohell.App_Start
     {
         protected static IMongoClient _client = new MongoClient("mongodb://localhost:27017");
         protected static IMongoDatabase _database = _client.GetDatabase("notel");
-        public MongoConfig()
-        {
-
-        }
+        public MongoConfig() {}
         public void SalvarCollection(object doc,string collection)
         {
            var col = _database.GetCollection<object>(collection);
@@ -26,6 +23,13 @@ namespace notelohell.App_Start
             var col = _database.GetCollection<T>(collection);
             return col.Find(filter).ToList();
         }
+
+        public List<T> Buscar<T>(FilterDefinition<T> filter, string collection,string projection)
+        {
+            var col = _database.GetCollection<T>(collection);
+            return col.Find(filter).Project<T>(projection).ToList();
+        }
+
         public BsonDocument Alterar<T>(FilterDefinition<T> filter,string collection,BsonDocument doc)
         {
             var col = _database.GetCollection<T>(collection);
