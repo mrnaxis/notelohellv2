@@ -15,7 +15,7 @@
         margin: 4px 4px 4px 4px;
     }
     .area-margin {
-        margin: 7px 7px 7px 7px;
+        margin: 10px 10px 10px 10px;
     }
 </style>
 
@@ -73,6 +73,15 @@
                                     <div id="chart-kills-quick"></div>
                                 </div>
                             </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div id="ExtraGraphsNDataQuick">
+
+                                </div>
+                            </div>
+                            <br />
+                            <br />
                         </div>
                         <div id="comp" class="tab-pane" role="tabpanel">
                             <h3>Status Gerais</h3>
@@ -106,6 +115,15 @@
                                     <div id="chart-kills-comp"></div>
                                 </div>
                             </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div id="ExtraGraphsNDataComp">
+
+                                </div>
+                            </div>
+                            <br />
+                            <br />
                         </div>
                     </div>
                     <br />
@@ -137,7 +155,7 @@
                     if (data !== null) {
                         var an = JSON.parse(data);
                         google.charts.load('current', { packages: ['corechart'] });
-                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral();});
+                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral(); DataHeroes();});
                     }
 
                     GetAvgStatus(an, 'comp');
@@ -156,6 +174,10 @@
                         ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-kills-quick', 'Kills', 'eliminations');
                         ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-kills-comp', 'Kills', 'eliminations');
                     }
+                    function DataHeroes() {
+                        CompareDataHeroes(an, 'Quick');
+                        CompareDataHeroes(an, 'Comp');
+                    }
                 },
                 error: function () {
                     alert("Deu Ruim! Tente Novamente!");
@@ -171,7 +193,7 @@
 
     function CKST(fieldToBeChecked) {
         if (typeof fieldToBeChecked === 'undefined' || typeof fieldToBeChecked === 'null')
-            return "0";
+            return 0;
         return fieldToBeChecked;
     }
 
@@ -264,6 +286,103 @@
         }
     }
 
+    function GetHeroesByType() {
+        return {
+            "tank": ["dva", "orisa", "reinhardt", "roadhog", "winston", "zarya"],
+            "support": ["mercy", "ana", "symmetra", "lucio", "zenyatta", "moira"],
+            "offensive": ["doomfist", "genji", "mccree", "pharah", "reaper", "soldier76", "sombra", "tracer"],
+            "defensive": ["bastion", "hanzo", "junkrat", "mei", "torbjorn", "widowmaker"]
+        };
+    }
+
+    function CompareDataHeroes(d, typeCons) {
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string') {
+            return null;
+        }
+
+        var lin;
+
+        if (typeCons === 'Quick')
+            lin = d.us.heroes.stats.quickplay;
+        else
+            lin = d.us.heroes.stats.competitive;
+
+        var heroes = GetHeroesByType();
+
+        var dtBarrier = [['Hero', 'Damage Blocked']];
+        var dtHealing = [['Hero', 'Healing']];
+        var dtDamage = [['Hero', 'Damage']];
+        var dtObjKills = [['Hero', 'Objective Kills']];
+
+        for (var i in lin) {
+            if (lin.hasOwnProperty(i)) {
+                if (heroes["tank"].indexOf(i) >= 0) {
+                    var l = lin[i];
+                    dtBarrier.push([i, CKST(l.hero_stats.damage_blocked)]);
+                }
+                else if (heroes["support"].indexOf(i) >= 0 && i.search("symmetr") < 0) {
+                    var l = lin[i];
+                    dtHealing.push([i, CKST(l.general_stats.healing_done)]);
+                }
+                else if (heroes["offensive"].indexOf(i) >= 0) {
+                    var l = lin[i];
+                    dtDamage.push([i, CKST(l.general_stats.all_damage_done)]);
+                }
+                else if (heroes["defensive"].indexOf(i) >= 0) {
+                    var l = lin[i];
+                    dtObjKills.push([i, CKST(l.general_stats.objective_kills)]);
+                }
+            }
+        }
+
+        if (dtBarrier.length > 0) {
+            $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-barrier-" + typeCons + "'></div></div>");
+            ConstructGraphsBare(dtBarrier, "graph-barrier-" + typeCons, "Dano Bloqueado");
+        }
+        if (dtHealing.length > 0) {
+            $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-healing-" + typeCons + "'></div></div>");
+            ConstructGraphsBare(dtHealing, "graph-healing-" + typeCons, "Cura");
+        }
+        if (dtDamage.length > 0) {
+            $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-damage-" + typeCons + "'></div></div>");
+            ConstructGraphsBare(dtDamage, "graph-damage-" + typeCons, "Dano Causado");
+        }
+        if (dtObjKills.length > 0) {
+            $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-objkill-" + typeCons + "'></div></div>");
+            ConstructGraphsBare(dtObjKills, "graph-objkill-" + typeCons, "Mortes no Objetivo");
+        }
+        
+    }
+
+    function ConstructGraphsBare(dt, gpLocalId, Title) {
+
+        if ((typeof dt !== 'string' || typeof dt !== 'object') && typeof Title !== 'string') {
+            return null;
+        }
+
+        if (typeof gpLocalId !== 'string')
+            gpLocalId = 'chart-time-' + typeCons;
+
+        var data = new google.visualization.arrayToDataTable(dt);
+
+        // Set chart options
+        var options = {
+            'title': Title,
+            'width': 580,
+            'height': 500,
+
+            'backgroundColor': {
+                'stroke': '#fff',
+                'strokeWidth': 1
+            }
+
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.BarChart(document.getElementById(gpLocalId));
+        chart.draw(data, options);
+    }
+
     function ConstructTheGeneralStatsGraphs(d, typeCons, gpLocalId, field, idfield) {
         if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string') {
             return null;
@@ -295,7 +414,13 @@
             var options = {
                 'title': field,
                 'width': 580,
-                'height': 500
+                'height': 500,
+
+                'backgroundColor': {
+                    'stroke': '#fff',
+                    'strokeWidth': 1
+                }
+
             };
 
             // Instantiate and draw our chart, passing in some options.
