@@ -3,92 +3,117 @@
     ViewBag.Title = "StatsUser";
 }
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div id="loadingData" class="ld-dt centro hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
-<div id="panelDataGame" class="divlazuli hidden">
-    <div class="centro-2">
-        <div class="container-fluid">
-            <div class="row">
-                <br />
-                <div class="col-md-1 col-lg-1" style="padding-right: 10em;">
-                    <div id="avatar-player" class="img-responsive"></div>
-                    <h4 class="tag-player"></h4>
-                </div>
-                <div class="col-md-10 col-lg-10">
-                    <h2 class="name-player"></h2>
-                </div>
-            </div>
-            <div class="row">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#quick" aria-controls="quick" role="tab" data-toggle="tab">Quickplay</a></li>
-                    <li role="presentation"><a href="#comp" aria-controls="comp" role="tab" data-toggle="tab">Competitivo</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="quick" class="tab-pane active" role="tabpanel">
-                        <h3>Status Gerais</h3>
-                        <div class="col-md-6">
-                            <ul id="stats-ovl-quick" class="list-group"></ul>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="chart-time-quick" class="hidden"></div>
-                        </div>
-                        <br />
-                        <br />
-                        <div class="col-md-12">
-                            <div class="col-md-6 panel-heroes">
-                                <div id="heroes-list-quick" class="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="heroes-info-quick" class="">
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div class="col-md-6">
-                            <div id="chart-damage-quick"></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="chart-kills-quick"></div>
-                        </div>
+<style>
+    .panel-heroes {
+        border-radius: 5px;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+    }
+
+    .heroes-item {
+        width: 15%;
+        margin: 4px 4px 4px 4px;
+    }
+    .area-margin {
+        margin: 7px 7px 7px 7px;
+    }
+</style>
+
+<div class="container-fluid">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <div id="loadingData" class="ld-dt centro hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
+    <div id="panelDataGame" class="divlazuli hidden">
+        <div class="centro-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <br />
+                    <div class="col-md-1 col-lg-1" style="padding-right: 10em;">
+                        <div id="avatar-player" class="img-responsive"></div>
+                        <h4 class="tag-player"></h4>
                     </div>
-                    <div id="comp" class="tab-pane" role="tabpanel">
-                        <h3>Status Gerais</h3>
-                        <div class="col-md-6">
-                            <ul id="stats-ovl-comp" class="list-group"></ul>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="chart-time-comp" class="hidden"></div>
-                        </div>
-                        <br />
-                        <br />
-                        <div class="col-md-12">
-                            <div class="col-md-6 panel-heroes">
-                                <div id="heroes-list-comp" class="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="heroes-info-comp">
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div class="col-md-6">
-                            <div id="chart-damage-comp"></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="chart-kills-comp"></div>
-                        </div>
+                    <div class="col-md-10 col-lg-10">
+                        <h2 class="name-player"></h2>
                     </div>
                 </div>
-                <br />
+                <div class="row">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#quick" aria-controls="quick" role="tab" data-toggle="tab">Quickplay</a></li>
+                        <li role="presentation"><a href="#comp" aria-controls="comp" role="tab" data-toggle="tab">Competitivo</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="quick" class="tab-pane active" role="tabpanel">
+                            <h3>Status Gerais</h3>
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6">
+                                    <ul id="stats-ovl-quick" class="list-group"></ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="chart-time-quick" class="hidden"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6 panel-heroes">
+                                    <div id="heroes-list-quick" class="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="heroes-info-quick" class="">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6">
+                                    <div id="chart-damage-quick"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="chart-kills-quick"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="comp" class="tab-pane" role="tabpanel">
+                            <h3>Status Gerais</h3>
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6">
+                                    <ul id="stats-ovl-comp" class="list-group"></ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="chart-time-comp" class="hidden"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6 panel-heroes">
+                                    <div id="heroes-list-comp" class="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="heroes-info-comp">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-md-12 area-margin">
+                                <div class="col-md-6">
+                                    <div id="chart-damage-comp"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="chart-kills-comp"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <script>
     function EnviarDados() {
@@ -172,6 +197,9 @@
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas: " +
                     CKST(lincompgs['medals'])
                     + "</span></li>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD: " +
+                    CKST(lincompgs['kpd'])
+                    + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Horas de Jogo: " +
                     CKST(lincompgs['time_played'])
                     + "</span></li>");
@@ -226,6 +254,7 @@
         for (var i in linquick) {
             if (linquick.hasOwnProperty(i)) {
                 $("#heroes-info-" + typeCons).append("<ul class='list-group " + i + '-' + typeCons + " hidden'></ul>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " + CKST(linquick[i].general_stats.games_won) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + CKST(linquick[i].general_stats.all_damage_done) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + CKST(linquick[i].general_stats.eliminations) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações Solo: " + CKST(linquick[i].general_stats.solo_kills) + "</span></li>");
