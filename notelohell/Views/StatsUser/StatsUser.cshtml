@@ -34,6 +34,10 @@
                     <div class="col-md-10 col-lg-10">
                         <h2 class="name-player"></h2>
                     </div>
+                    <div class="col-md-12 col-lg-12">
+                        <h5>Principal Tipo de Herói Quick: </h5><h4 class="main-type-Quick"></h4>
+                        <h5>Principal Tipo de Herói Comp: </h5><h4 class="main-type-Comp"></h4>
+                    </div>
                 </div>
                 <div class="row">
                     <ul class="nav nav-tabs" role="tablist">
@@ -177,6 +181,8 @@
                     function DataHeroes() {
                         CompareDataHeroes(an, 'Quick');
                         CompareDataHeroes(an, 'Comp');
+                        CompareNSeeTypesByTime(an, 'Quick');
+                        CompareNSeeTypesByTime(an, 'Comp');
                     }
                 },
                 error: function () {
@@ -293,6 +299,70 @@
             "offensive": ["doomfist", "genji", "mccree", "pharah", "reaper", "soldier76", "sombra", "tracer"],
             "defensive": ["bastion", "hanzo", "junkrat", "mei", "torbjorn", "widowmaker"]
         };
+    }
+
+    function CompareNSeeTypesByTime(d, typeCons) {
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string') {
+            return null;
+        }
+
+        var lin;
+
+        if (typeCons === 'Quick')
+            lin = d.us.heroes.playtime.quickplay
+        else
+            lin = d.us.heroes.playtime.competitive;
+
+        var heroes = GetHeroesByType();
+
+        var tank = 0, supp = 0, offen = 0, defen = 0;
+        var dtTimeSpentPerType = [['Type', 'Time']];
+
+        for (var i in lin) {
+            if (lin.hasOwnProperty(i)) {
+                if (heroes["tank"].indexOf(i) >= 0)
+                    tank += CKST(lin[i]);
+                if (heroes["support"].indexOf(i) >= 0)
+                    supp += CKST(lin[i]);
+                if (heroes["offensive"].indexOf(i) >= 0)
+                    offen += CKST(lin[i]);
+                if (heroes["defensive"].indexOf(i) >= 0)
+                    defen += CKST(lin[i]);
+            }
+        }
+
+        dtTimeSpentPerType.push(["Tank", tank]);
+        dtTimeSpentPerType.push(["Suporte", supp]);
+        dtTimeSpentPerType.push(["Ofensivo", offen]);
+        dtTimeSpentPerType.push(["Defensivo", defen]);
+
+        $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-TypesTime-" + typeCons + "'></div></div>");
+
+        ConstructGraphsBare(dtTimeSpentPerType, "graph-TypesTime-" + typeCons, "Tempo por Tipo de Heróis");
+
+        var obj = { 'Tanque': tank, 'Suporte': supp, 'Ofensivo': offen, 'Defensivo': defen };
+        var arrayValues = [tank, supp, offen, defen];
+        arrayValues.sort();
+
+        var biggerValue = 0;
+        var Type = "N/A";
+
+        for (var t in obj) {
+            if (obj.hasOwnProperty(t)) {
+                if (obj[t] == arrayValues[0]) {
+                    biggerValue = arrayValues;
+                    Type = t;
+                    break;
+                }
+            }
+        }
+
+        $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Principal Tipo de Herói Usado: " +
+            CKST(Type)
+            + "</span></li>");
+
+        $(".main-type-" + typeCons).text(Type);
+        
     }
 
     function CompareDataHeroes(d, typeCons) {
