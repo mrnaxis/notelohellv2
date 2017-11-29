@@ -100,7 +100,29 @@
                             <h3>Status Gerais</h3>
                             <div class="col-md-12 area-margin">
                                 <div class="col-md-6">
-                                    <ul id="stats-ovl-comp" class="list-group"></ul>
+                                    <ul id="stats-ovl-comp" class="list-group">
+                                        @if (ViewBag.Media != null)
+                                        {
+                                            var st = ViewBag.Media;
+                                            <li class='list-group-item'>
+                                                <span class='txt-black'>
+                                                    Media do Jogador:
+                                                    @ViewBag.Media %
+                                                </span>
+                                            </li>
+                                        }
+
+                                        @if (ViewBag.MediaGeral != null)
+                                        {
+                                            var st = ViewBag.MediaGeral;
+                                            <li class='list-group-item'>
+                                                <span class='txt-black'>
+                                                    Media Geral dos jogadores:
+                                                    @ViewBag.MediaGeral %
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
                                 </div>
                                 <div class="col-md-6">
                                     <div id="chart-time-comp" class="hidden"></div>
