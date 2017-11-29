@@ -15,6 +15,8 @@ namespace notelohell.Controllers
         [IDRequired]
         public ActionResult StatsUser()
         {
+            ViewBag.MediaGeral = MediaGeral().ToString();
+            ViewBag.Media = Media().ToString();
             return View();
         }
 
