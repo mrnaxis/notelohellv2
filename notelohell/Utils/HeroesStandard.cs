@@ -46,7 +46,16 @@ namespace notelohell.Utils
         };
     }
 
-    public class OffensiveHero
+    public interface IHeroType
+    {
+        long GamesWon { get; set; }
+        long GamesLost { get; set; }
+        long GamesPlayed { get; set; }
+
+        //void EvaluateStatus();
+    }
+
+    public class OffensiveHero : IHeroType
     {
         public long GamesWon { get; set; }
         public long GamesLost { get; set; }
@@ -58,7 +67,7 @@ namespace notelohell.Utils
         public long WeaponAcc { get; set; }
     }
 
-    public class DefensiveHero
+    public class DefensiveHero : IHeroType
     {
         public long GamesWon { get; set; }
         public long GamesLost { get; set; }
@@ -71,7 +80,7 @@ namespace notelohell.Utils
         public long DamageBlockAvg { get; set; }
     }
 
-    public class TankHero
+    public class TankHero : IHeroType
     {
         public long GamesWon { get; set; }
         public long GamesLost { get; set; }
@@ -81,7 +90,7 @@ namespace notelohell.Utils
         public long ObjectiveTime { get; set; }
     }
 
-    public class SupportHero
+    public class SupportHero : IHeroType
     {
         public long GamesWon { get; set; }
         public long GamesLost { get; set; }
@@ -92,5 +101,26 @@ namespace notelohell.Utils
         public long RessurectAvg { get; set; }
         public long Healing { get; set; }
         public long HealingAvg { get; set; }
+
+        public SupportHero(long GamesWon, long GamesLost, long GamesPlayed, long DamageAmp, long DamageAmpAvg, long Ressurect, long RessurectAvg, long Healing, long HealingAvg)
+        {
+
+        }
+
+    }
+
+    public class EvaluatePlayer
+    {
+        public SupportHero Supp { get; set; }
+        public TankHero Tank { get; set; }
+        public OffensiveHero Off { get; set; }
+        public DefensiveHero Def { get; set; }
+        //public IDictionary HeroNType { get; set; }
+        public long TimeSpent { get; set; }
+
+        public EvaluatePlayer()
+        {
+
+        }
     }
 }
