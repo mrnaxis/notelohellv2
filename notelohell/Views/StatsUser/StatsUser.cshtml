@@ -34,6 +34,19 @@
                     <div class="col-md-10 col-lg-10">
                         <h2 class="name-player"></h2>
                     </div>
+                    <div class="col-md-12 col-lg-12">
+                        <h5>Principal Tipo de Herói Quick: </h5><h4 class="main-type-Quick"></h4>
+                        <h5>Principal Tipo de Herói Comp: </h5><h4 class="main-type-Comp"></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <h3>Tarefas: </h3>
+                    <div class="col-md-6 col-lg-6">
+                        <ul id="task-list" class="list-group"></ul>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div id="task-graph"></div>
+                    </div>
                 </div>
                 <div class="row">
                     <ul class="nav nav-tabs" role="tablist">
@@ -142,9 +155,9 @@
         if ($("#loadingData").hasClass("hidden"))
             $("#loadingData").removeClass("hidden");
 
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("BuscarDadosJogos", "StatsUser")",
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BuscarDadosJogos", "StatsUser")",
                 data: "",
                 contentType: "application/json;",
                 dataType: "json",
@@ -155,7 +168,7 @@
                     if (data !== null) {
                         var an = JSON.parse(data);
                         google.charts.load('current', { packages: ['corechart'] });
-                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral(); DataHeroes();});
+                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral(); DataHeroes(); GetDataFromTasks();});
                     }
 
                     GetAvgStatus(an, 'comp');
@@ -177,6 +190,8 @@
                     function DataHeroes() {
                         CompareDataHeroes(an, 'Quick');
                         CompareDataHeroes(an, 'Comp');
+                        CompareNSeeTypesByTime(an, 'Quick');
+                        CompareNSeeTypesByTime(an, 'Comp');
                     }
                 },
                 error: function () {
@@ -213,6 +228,9 @@
                 var lincompov = lin.competitive.overall_stats;
                 var lincompgs = lin.competitive.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + lincompov['avatar'] + "' alt='PlayerChar'/>");
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Ranking : " +
+                    CKST(lincompov['comprank'])
+                    + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
                     CKST(lincompov['wins'])
                     + "</span></li>");
@@ -232,7 +250,7 @@
                 var linquickgs = lin.quickplay.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + linquickov['avatar'] + "' alt='PlayerChar'/>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
-                    CKST(linquickov['wins'])
+                    CKST(linquickgs['games_won'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b): " +
                     CKST(linquickgs['medals'])
@@ -276,11 +294,14 @@
         for (var i in linquick) {
             if (linquick.hasOwnProperty(i)) {
                 $("#heroes-info-" + typeCons).append("<ul class='list-group " + i + '-' + typeCons + " hidden'></ul>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'><b> " + i + "</b></span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " + CKST(linquick[i].general_stats.games_won) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total de Dano Causado: " + CKST(linquick[i].general_stats.all_damage_done) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações : " + CKST(linquick[i].general_stats.eliminations) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Eliminações Solo: " + CKST(linquick[i].general_stats.solo_kills) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Mortes : " + CKST(linquick[i].general_stats.deaths) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD - Solo : " + CKST(linquick[i].general_stats.solo_kills / linquick[i].general_stats.deaths) + "</span></li>");
+                $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>KPD - Geral : " + CKST(linquick[i].general_stats.eliminations / linquick[i].general_stats.deaths) + "</span></li>");
                 $("." + i + '-' + typeCons).append("<li class='list-group-item'><span class='txt-black'>Total Medalhas(g/s/b) : " + CKST(linquick[i].general_stats.medals) + "</span></li>");
             }
         }
@@ -293,6 +314,70 @@
             "offensive": ["doomfist", "genji", "mccree", "pharah", "reaper", "soldier76", "sombra", "tracer"],
             "defensive": ["bastion", "hanzo", "junkrat", "mei", "torbjorn", "widowmaker"]
         };
+    }
+
+    function CompareNSeeTypesByTime(d, typeCons) {
+        if ((typeof d !== 'string' || typeof d !== 'object') && typeof typeCons !== 'string') {
+            return null;
+        }
+
+        var lin;
+
+        if (typeCons === 'Quick')
+            lin = d.us.heroes.playtime.quickplay
+        else
+            lin = d.us.heroes.playtime.competitive;
+
+        var heroes = GetHeroesByType();
+
+        var tank = 0, supp = 0, offen = 0, defen = 0;
+        var dtTimeSpentPerType = [['Type', 'Time']];
+
+        for (var i in lin) {
+            if (lin.hasOwnProperty(i)) {
+                if (heroes["tank"].indexOf(i) >= 0)
+                    tank += CKST(lin[i]);
+                if (heroes["support"].indexOf(i) >= 0)
+                    supp += CKST(lin[i]);
+                if (heroes["offensive"].indexOf(i) >= 0)
+                    offen += CKST(lin[i]);
+                if (heroes["defensive"].indexOf(i) >= 0)
+                    defen += CKST(lin[i]);
+            }
+        }
+
+        dtTimeSpentPerType.push(["Tank", tank]);
+        dtTimeSpentPerType.push(["Suporte", supp]);
+        dtTimeSpentPerType.push(["Ofensivo", offen]);
+        dtTimeSpentPerType.push(["Defensivo", defen]);
+
+        $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-TypesTime-" + typeCons + "'></div></div>");
+
+        ConstructGraphsBare(dtTimeSpentPerType, "graph-TypesTime-" + typeCons, "Tempo por Tipo de Heróis");
+
+        var obj = { 'Tanque': tank, 'Suporte': supp, 'Ofensivo': offen, 'Defensivo': defen };
+        var arrayValues = [tank, supp, offen, defen];
+        arrayValues.sort();
+
+        var biggerValue = 0;
+        var Type = "N/A";
+
+        for (var t in obj) {
+            if (obj.hasOwnProperty(t)) {
+                if (obj[t] == arrayValues[0]) {
+                    biggerValue = arrayValues;
+                    Type = t;
+                    break;
+                }
+            }
+        }
+
+        $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Principal Tipo de Herói Usado: " +
+            CKST(Type)
+            + "</span></li>");
+
+        $(".main-type-" + typeCons).text(Type);
+
     }
 
     function CompareDataHeroes(d, typeCons) {
@@ -351,7 +436,7 @@
             $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-objkill-" + typeCons + "'></div></div>");
             ConstructGraphsBare(dtObjKills, "graph-objkill-" + typeCons, "Mortes no Objetivo");
         }
-        
+
     }
 
     function ConstructGraphsBare(dt, gpLocalId, Title) {
@@ -474,5 +559,41 @@
 
             $("#" + gpLocalId).removeClass("hidden");
         }
+    }
+
+    function GetDataFromTasks() {
+
+        var dtTasks = [['Status Tarefas', 'Status']];
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BuscarTasksGeral", "StatsUser")",
+            data: "",
+            contentType: "application/json;",
+            dataType: "json",
+            success: function (data) {
+                if (typeof data !== 'undefined' || typeof data !== 'null') {
+                    var tk = data;
+
+                    var total = Number(tk.TasksTotal), pronto = Number(tk.TasksDone), nPronto = Number(tk.TaskUnDone);
+                    $("#task-list").append("<li class='list-group-item'><span class='txt-black'>Tarefas Totais: "
+                        + CKST(total) + "</span></li>");
+                    dtTasks.push(['Totais', CKST(total)]);
+                    $("#task-list").append("<li class='list-group-item'><span class='txt-black'>Tarefas Feitas: "
+                        + CKST(pronto) + "</span></li>");
+                    dtTasks.push(['Feitas', CKST(pronto)]);
+                    $("#task-list").append("<li class='list-group-item'><span class='txt-black'>Tarefas Pendentes: "
+                        + CKST(nPronto) + "</span></li>");
+                    dtTasks.push(['Pendentes', CKST(nPronto)]);
+
+                    if (dtTasks.length > 0 && Number(total + pronto + nPronto) !== 0) {
+                        ConstructGraphsBare(dtTasks, 'task-graph', 'Status de Tarefas');
+                    }
+                }
+            },
+            error: function () {
+
+            }
+        });
     }
 </script>

@@ -39,5 +39,22 @@ namespace notelohell.Controllers
             UsersModel user = (UsersModel)Session["Player"];
             return stats.CalcularVitorias(user.DadosOverWatch);
         }
+        public JsonResult BuscarTasksGeral()
+        {
+            TaskUserModel t = new TaskUserModel();
+            List<TaskUserModel> tasks = t.BuscarTasks(Session["PlayerName"].ToString());
+
+            if (tasks != null)
+            {
+                return Json(new
+                {
+                    TasksTotal = tasks.Count.ToString(),
+                    TasksDone = tasks.Count(x => x.Complete == true).ToString(),
+                    TaskUnDone = tasks.Count(x => x.Complete == false).ToString()
+                });
+            }
+            else
+                return Json(new { });
+        }
     }
 }
