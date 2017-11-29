@@ -8,13 +8,16 @@ using System.Web.Mvc;
 using notelohell.Services;
 using notelohell.Models;
 using MongoDB.Bson;
-
+using notelohell.Utils;
 namespace notelohell.Controllers
 {
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
+            OwStats stats = new OwStats();
+            var teste = stats.DadosOverWatch();//gambipt2
+
             //Gambi();
             return View();
         }

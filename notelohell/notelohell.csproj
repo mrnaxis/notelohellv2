@@ -195,6 +195,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\OwAPI.cs" />
     <Compile Include="Utils\HeroesStandard.cs" />
+    <Compile Include="Utils\OwStats.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
