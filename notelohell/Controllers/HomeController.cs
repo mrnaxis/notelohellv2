@@ -73,13 +73,13 @@ namespace notelohell.Controllers
             user.Ativo = true;
             user.GravarUsuario();
 
-            user.Nome = "Bia Biosa";
-            user.Email = "bia@bia.com";
-            user.Pwsin = "12345";
-            user.GameTag = "Meshiru#1326";
-            user.BirthDate = dt;
-            user.Ativo = true;
-            user.GravarUsuario();
+            //user.Nome = "Bia Biosa";
+            //user.Email = "bia@bia.com";
+            //user.Pwsin = "12345";
+            //user.GameTag = "Meshiru#1326";
+            //user.BirthDate = dt;
+            //user.Ativo = true;
+            //user.GravarUsuario();
 
             user.Nome = "Sujeito Sujeitoso";
             user.Email = "sujeito@sujeito.com";
