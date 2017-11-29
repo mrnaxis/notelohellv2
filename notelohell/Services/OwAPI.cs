@@ -21,7 +21,11 @@ namespace notelohell.Services
                 wc.Headers.Add("Accept", " text/html, application/xhtml+xml, */*");
                 wc.Headers.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
                 string url = "http://owapi.net/api/v3/u/" + tag + "/blob";
-                data = wc.DownloadString(url);
+                try
+                {
+                    data = wc.DownloadString(url);
+                }
+                catch { }
             }      
 
             return data;
@@ -37,7 +41,14 @@ namespace notelohell.Services
                 wc.Headers.Add("Accept", " text/html, application/xhtml+xml, */*");
                 wc.Headers.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
                 string url = "http://owapi.net/api/v3/u/" + tag + "/blob";
-                data = wc.DownloadString(url);
+                try
+                {
+                    data = wc.DownloadString(url);
+                }
+                catch
+                {
+                    data = string.Empty;
+                }
             }
             if(usuario != null)
             {
