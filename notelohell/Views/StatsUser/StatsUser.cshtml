@@ -251,7 +251,7 @@
                 var lincompgs = lin.competitive.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + lincompov['avatar'] + "' alt='PlayerChar'/>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Ranking : " +
-                    CKST(lincompov['comprank'])
+                    CKST(lincompov['comprank'] === null ? "N/A" : lincompov['comprank'])
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
                     CKST(lincompov['wins'])

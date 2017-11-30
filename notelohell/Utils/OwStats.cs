@@ -19,7 +19,7 @@ namespace notelohell.Utils
         /// </summary>
         public List<BsonDocument> DadosOverWatch()
         {
-            string projection = "{DadosOverWatch : 1, _id : 0}";
+            string projection = "{DadosOverWatch : 1, _id : 0, Nome: 1}";
             var builder = Builders<BsonDocument>.Filter;
             FilterDefinition<BsonDocument> filter;
             filter = builder.Empty;
@@ -54,16 +54,15 @@ namespace notelohell.Utils
             }
             if (cont > 0)
                 total = soma / cont;
-            return total;
+            return Math.Round(total, 2);
         }
         public double CalcularVitorias(BsonDocument dados)
         {
             double cont, soma, total;
             cont = soma = total = 0;
-
             try
             {
-                var comp = dados["DadosOverWatch"]["us"]["stats"]["competitive"]["game_stats"].ToBsonDocument();
+                var comp = dados["us"]["stats"]["competitive"]["game_stats"].ToBsonDocument();
                 var win = comp["games_won"];
                 var games = comp["games_played"];
 
@@ -74,12 +73,15 @@ namespace notelohell.Utils
                 }
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+
+            }
 
 
             if (cont > 0)
                 total = soma / cont;
-            return total;
+            return Math.Round(total, 2);
         }
     }
 }

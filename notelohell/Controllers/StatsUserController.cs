@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using notelohell.Models;
+using notelohell.DAO;
 using notelohell.AuthControl;
 using notelohell.Utils;
 
@@ -38,7 +39,8 @@ namespace notelohell.Controllers
         public double Media()
         {
             OwStats stats = new OwStats();
-            UsersModel user = (UsersModel)Session["Player"];
+            UsersDAO dao = new UsersDAO();
+            UsersModel user = dao.BuscarUsuario(Session["PlayerName"].ToString(), null);
             return stats.CalcularVitorias(user.DadosOverWatch);
         }
         public JsonResult BuscarTasksGeral()
