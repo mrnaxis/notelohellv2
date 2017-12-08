@@ -44,8 +44,8 @@
                     {
                         foreach (var t in ViewBag.Task)
                         {
-                            var st = t.Complete?"comp":"";
-                            <li><i class="fa fa-2x fa-check @st"></i><e class="task-fixed"> @t.Nome</e></li>
+                            var st = t.Complete ? "comp" : "";
+                            <li id="@t.Nome.Replace(" ", "_")"><i class="task-marker fa fa-2x fa-check @st"></i><e class="task-fixed"> @t.Nome</e></li>
                         }
                     }
                 </ul>
@@ -87,7 +87,15 @@
             });
 
             $("#nameTask").on("blur", function (event) {
+                var nameTaskNew = document.getElementById("nameTask").value;
+                if (nameTaskNew === "" || typeof nameTaskNew === 'undefined')
+                    return;
                 ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
+                var nameTaskOld = document.getElementById("nameTaskOld").value;
+                var taskFinal = $("#" + nameTaskOld.replace(/ /g, "_")).find("e").first();
+                taskFinal.html(nameTaskNew);
+                $("#" + nameTaskOld.replace(/ /g, "_"))[0].id = nameTaskNew.replace(/ /g, "_");
+                
             });
 
             $("#descTask").on("blur", function (event) {
@@ -96,11 +104,27 @@
 
             $(".fa-check").on("click", function (event) {
                 var e = event;
+                var taskNameNew;
                 if (!$(e.currentTarget).hasClass("comp"))
                     $(e.currentTarget).addClass("comp");
                 else
                     $(e.currentTarget).removeClass("comp");
-                ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
+
+                if ($(e.currentTarget).hasClass("task-marker")) {
+                    var el = $(e.currentTarget).parents("li").first();//.find("e");
+                    taskNameNew = el.first().text();
+                    if (document.getElementById("nameTask").value.trim() === taskNameNew) {
+                        if (!$(".stTask").hasClass("comp") && $(e.currentTarget).hasClass("comp"))
+                            $(".stTask").addClass("comp");
+                        else
+                            $(".stTask").removeClass("comp");
+                    }    
+                }
+                else {
+                    taskNameNew = document.getElementById("nameTask").value;
+                }
+
+                ObjMakerTask(taskNameNew, $(".stTask").hasClass("comp")||$(".task-marker").hasClass("comp"), true, LoaderIndicator());
             });
 
             $(".fa-trash").on("click", function (event) {
