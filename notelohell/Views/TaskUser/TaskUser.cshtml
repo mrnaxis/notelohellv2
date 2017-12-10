@@ -45,7 +45,7 @@
                         foreach (var t in ViewBag.Task)
                         {
                             var st = t.Complete ? "comp" : "";
-                            <li id="@t.Nome.Replace(" ", "_")"><i class="task-marker fa fa-2x fa-check @st"></i><e class="task-fixed"> @t.Nome</e></li>
+                            <li id="@t.Nome.Replace(" ", "_")"><i class="task-marker fa fa-2x fa-check @st"></i><e class="task-fixed">@t.Nome</e></li>
                         }
                     }
                 </ul>
@@ -77,7 +77,7 @@
             $(".sort-derp").sortable();
 
             $("#addTk").on("click", function () {
-                $(".list-view").append("<li><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'> Nova Tarefa<e/></li>");
+                $(".list-view").append("<li id='Nova_Tarefa'><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'>Nova Tarefa<e/></li>");
                 SaveData({ Order: $(".list-view").find("li").length - 1 });
                 FinalCall();
             });
@@ -87,7 +87,7 @@
             });
 
             $("#nameTask").on("blur", function (event) {
-                var nameTaskNew = document.getElementById("nameTask").value;
+                var nameTaskNew = document.getElementById("nameTask").value.trim();
                 if (nameTaskNew === "" || typeof nameTaskNew === 'undefined')
                     return;
                 ObjMakerTask(document.getElementById("nameTask").value, $(".stTask").hasClass("comp"), true, LoaderIndicator());
@@ -111,20 +111,32 @@
                     $(e.currentTarget).removeClass("comp");
 
                 if ($(e.currentTarget).hasClass("task-marker")) {
-                    var el = $(e.currentTarget).parents("li").first();//.find("e");
+                    var el = $(e.currentTarget).parents("li").first();
                     taskNameNew = el.first().text();
-                    if (document.getElementById("nameTask").value.trim() === taskNameNew) {
+                    if (document.getElementById("nameTask").value === taskNameNew) {
                         if (!$(".stTask").hasClass("comp") && $(e.currentTarget).hasClass("comp"))
                             $(".stTask").addClass("comp");
                         else
                             $(".stTask").removeClass("comp");
-                    }    
+                    }
+                    else {
+
+                    }
                 }
-                else {
+                else if ($(e.currentTarget).hasClass("stTask")) {
                     taskNameNew = document.getElementById("nameTask").value;
+                    var el = $("#" + taskNameNew.replace(/ /g, "_")).find("i").first();
+
+                    if (el !== null && typeof el !== 'undefined') {
+                        if (!el.hasClass("comp") && $(e.currentTarget).hasClass("comp")) {
+                            el.addClass("comp");
+                        }
+                        else
+                            el.removeClass("comp");
+                    }
                 }
 
-                ObjMakerTask(taskNameNew, $(".stTask").hasClass("comp")||$(".task-marker").hasClass("comp"), true, LoaderIndicator());
+                ObjMakerTask(taskNameNew, $(e.currentTarget).hasClass("comp"), true, LoaderIndicator());
             });
 
             $(".fa-trash").on("click", function (event) {
@@ -143,7 +155,7 @@
                 if (!panelTask.hasClass("hide"))
                     panelTask.addClass("hide");
                 //exibir dados
-                var targetName = e.currentTarget.textContent.trim();
+                var targetName = e.currentTarget.textContent;
                 if (typeof name !== 'null' && typeof name !== 'undefined')
                     targetName = name;
                 GetData(targetName);

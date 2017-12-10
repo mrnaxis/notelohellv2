@@ -193,10 +193,12 @@
                         google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral(); DataHeroes(); GetDataFromTasks();});
                     }
 
+                    //check if comp is null and if quick is null, each one with a if statement
                     GetAvgStatus(an, 'comp');
+                    GetHeroesNStats(an, 'comp');
                     GetAvgStatus(an, 'quick');
                     GetHeroesNStats(an, 'quick');
-                    GetHeroesNStats(an, 'comp');
+                    
 
                     function TimeGraphs() {
                         ConstructTheTimeGraphs(an, 'comp');
@@ -442,19 +444,19 @@
             }
         }
 
-        if (dtBarrier.length > 0) {
+        if (dtBarrier.length > 1) {
             $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-barrier-" + typeCons + "'></div></div>");
             ConstructGraphsBare(dtBarrier, "graph-barrier-" + typeCons, "Dano Bloqueado");
         }
-        if (dtHealing.length > 0) {
+        if (dtHealing.length > 1) {
             $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-healing-" + typeCons + "'></div></div>");
             ConstructGraphsBare(dtHealing, "graph-healing-" + typeCons, "Cura");
         }
-        if (dtDamage.length > 0) {
+        if (dtDamage.length > 1) {
             $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-damage-" + typeCons + "'></div></div>");
             ConstructGraphsBare(dtDamage, "graph-damage-" + typeCons, "Dano Causado");
         }
-        if (dtObjKills.length > 0) {
+        if (dtObjKills.length > 1) {
             $("#ExtraGraphsNData" + typeCons).append("<div class='col-md-6'><div id='graph-objkill-" + typeCons + "'></div></div>");
             ConstructGraphsBare(dtObjKills, "graph-objkill-" + typeCons, "Mortes no Objetivo");
         }
