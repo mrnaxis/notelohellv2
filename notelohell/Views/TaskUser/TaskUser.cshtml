@@ -63,7 +63,7 @@
                 <div class="col-md-4 form-inline">
                     <div id="taskDateGroup" class="form-group">
                         <label for="dataTask">Até:&nbsp;</label><input type="text" id="dataTask" style="max-width: 250px;" class="form-control" />
-                        <div id="taskDateError" class="alert alert-danger hide"></div>
+                        <div id="taskDateError" class="hide" style="color:red;"></div>
                     </div>
                     <i class="fa fa-2x fa-trash" style="position:absolute; padding-top:2px; padding-left: 30px;" aria-hidden="true"></i>
                     </div>
@@ -83,11 +83,12 @@
             $("#addTk").on("click", function () {
                 $(".list-view").append("<li id='Nova_Tarefa'><i class='fa fa-2x fa-check'> </i><e class='task-fixed newLife'>Nova Tarefa<e/></li>");
                 SaveData({ Order: $(".list-view").find("li").length - 1 });
-                FinalCall();
+                FinalCall(undefined, ".newLife");
+                //location.reload();
             });
 
             $("#dataTask").on("blur", function (event) {
-                var dateTyped = $("#dataTask").text();
+                var dateTyped = $("#dataTask")[0];
                 if (!dateValid(dateTyped)) {
                     $("#taskDateError").text("Data inválida, valor não será salvo!");
                     $("#taskDateError").removeClass("hide");
@@ -152,7 +153,6 @@
                 }
 
                 ObjMakerTask(taskNameNew, $(e.currentTarget).hasClass("comp"), true, LoaderIndicator());
-                $(this).off(event);
             });
 
             $(".fa-trash").on("click", function (event) {
@@ -164,8 +164,12 @@
             FinalCall();
         });
 
-        function FinalCall(name) {
-            $(".task-fixed").on("click", function (event) {
+        function FinalCall(name, type) {
+
+            if (typeof type === 'undefined' || type === '' || type === null)
+                type = ".task-fixed";
+
+            $(type).on("click", function (event) {
                 var panelTask = $("#panel-task");
                 var e = event;
                 if (!panelTask.hasClass("hide"))
@@ -178,9 +182,8 @@
                 panelTask.removeClass("hide");
             });
 
-            if (typeof name !== 'null' && typeof name !== 'undefined')
-                $(".task-fixed").click();
-
+            //if (typeof name !== 'null' && typeof name !== 'undefined')
+            $(".newLife").click();
         }
 
         function LoaderIndicator() {
@@ -271,7 +274,7 @@
                         $(".newLife").html(data.Nome);
                     }
                     $(".newLife").removeClass("newLife");
-                    FinalCall(data.Nome);
+                    //FinalCall(data.Nome);
                 },
                 error: null
             });

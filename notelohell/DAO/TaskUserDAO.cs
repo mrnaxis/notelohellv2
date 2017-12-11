@@ -55,7 +55,7 @@ namespace notelohell.DAO
             if (checkPrev != null && checkAll != null)
             {
                 if (checkPrev.Count > 0)
-                    task.Nome = task.Nome + (checkAll.Count + 1).ToString();
+                    task.Nome = string.Concat(task.Nome," ", (checkAll.Count + 1).ToString());
             }
 
             var doc = new BsonDocument

@@ -102,6 +102,7 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <div id="loadingData" class="ld-dt centro hidden"><span class="fa fa-spinner fa-pulse fa-5x fa-fw text-center" style="color:black;" aria-hidden="true"></span></div>
+    <div id="ErrorMessages" class="ld-dt centro hidden"></div> 
     <div id="panelDataGame" class="divlazuli hidden">
         <div class="centro-2">
             <div class="container-fluid">
@@ -199,21 +200,24 @@
     function EnviarDados() {
         var gameTag = document.getElementById("gameTag");
 
-        if (!$("#panelDataGame").hasClass("hidden"))
-            $("#panelDataGame").addClass("hidden");
-
-        if ($("#loadingData").hasClass("hidden"))
-            $("#loadingData").removeClass("hidden");
-
         if (gameTag !== null && gameTag !== 'undefined' && gameTag !== undefined) {
+            if (gameTag.value === "") {
+                alert("digite seu battleTag");
+                return false;
+            }
+
+            if (!$("#panelDataGame").hasClass("hidden"))
+                $("#panelDataGame").addClass("hidden");
+
+            if ($("#loadingData").hasClass("hidden"))
+                $("#loadingData").removeClass("hidden");
+
+            if (!$("#ErrorMessages").hasClass("hidden")){
+                $("#ErrorMessages").addClass("hidden");
+            }
 
             $("#send").attr("disabled", "disabled");
 
-            if (gameTag.value === "") {
-                alert("digite seu battleTag");
-                return;
-            }
-            
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("Teste", "Home")",
@@ -221,30 +225,42 @@
                 contentType: "application/json;",
                 dataType: "json",
                 success: function (data) {
-                    $("#send").removeAttr("disabled");
-                    $("#loadingData").addClass("hidden");
-                    $("#panelDataGame").removeClass("hidden");
-                    if (data !== null) {
-                        var an = JSON.parse(data);
-                        google.charts.load('current', { packages: ['corechart'] });
-                        google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral();});
+                    if (data !== "" && typeof data !== null) {
+                        $("#send").removeAttr("disabled");
+                        $("#loadingData").addClass("hidden");
+                        $("#panelDataGame").removeClass("hidden");
+                        if (data !== null) {
+                            var an = JSON.parse(data);
+                            google.charts.load('current', { packages: ['corechart'] });
+                            google.charts.setOnLoadCallback(function () { TimeGraphs(); GraphsGeneral(); });
+                        }
+
+                        GetAvgStatus(an, 'comp');
+                        GetAvgStatus(an, 'quick');
+                        GetHeroesNStats(an, 'quick');
+                        GetHeroesNStats(an, 'comp');
+
+                        function TimeGraphs() {
+                            ConstructTheTimeGraphs(an, 'comp');
+                            ConstructTheTimeGraphs(an, 'quick');
+                        }
+
+                        function GraphsGeneral() {
+                            ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-damage-quick', 'Damage', 'all_damage_done');
+                            ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-damage-comp', 'Damage', 'all_damage_done');
+                            ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-kills-quick', 'Kills', 'eliminations');
+                            ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-kills-comp', 'Kills', 'eliminations');
+                        }
                     }
+                    else {
+                        $("#ErrorMessages").html("TAG não encontrada. Verifique a TAG inserida ou sua conexão.");
+                        $("#ErrorMessages").removeClass("hidden");
 
-                    GetAvgStatus(an, 'comp');
-                    GetAvgStatus(an, 'quick');
-                    GetHeroesNStats(an, 'quick');
-                    GetHeroesNStats(an, 'comp');
+                        $("#send").removeAttr("disabled");
+                        $("#loadingData").addClass("hidden");
 
-                    function TimeGraphs() {
-                        ConstructTheTimeGraphs(an, 'comp');
-                        ConstructTheTimeGraphs(an, 'quick');
-                    }
+                        setTimeout(function () { $("#ErrorMessages").addClass("hidden"); }, 5000);
 
-                    function GraphsGeneral() {
-                        ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-damage-quick', 'Damage', 'all_damage_done');
-                        ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-damage-comp', 'Damage', 'all_damage_done');
-                        ConstructTheGeneralStatsGraphs(an, 'quick', 'chart-kills-quick', 'Kills', 'eliminations');
-                        ConstructTheGeneralStatsGraphs(an, 'comp', 'chart-kills-comp', 'Kills', 'eliminations');
                     }
                 },
                 error: function () {
@@ -253,7 +269,6 @@
                     $("#loadingData").addClass("hidden");
                 }
             });
-            
         }
     }
     $(document).ready(function () {

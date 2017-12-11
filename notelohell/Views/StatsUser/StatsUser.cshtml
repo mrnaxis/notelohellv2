@@ -252,8 +252,8 @@
                 var lincompov = lin.competitive.overall_stats;
                 var lincompgs = lin.competitive.game_stats;
                 $("#avatar-player").html("<img class='img-rounded' src='" + lincompov['avatar'] + "' alt='PlayerChar'/>");
-                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Ranking : " +
-                    CKST(lincompov['comprank'] === null ? "N/A" : lincompov['comprank'])
+                $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Ranking : <b>" +
+                    CKST(lincompov['comprank'] === null ? "N/A" : lincompov['comprank']) + "</b>"
                     + "</span></li>");
                 $("#stats-ovl-" + typeCons).append("<li class='list-group-item'><span class='txt-black'>Vitórias: " +
                     CKST(lincompov['wins'])
@@ -573,8 +573,8 @@
             // Set chart options
             var options = {
                 'title': 'How Much Time Did I Waste?',
-                'width': 500,
-                'height': 450
+                'width': 580,
+                'height': 500
             };
 
             // Instantiate and draw our chart, passing in some options.
